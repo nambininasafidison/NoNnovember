@@ -88,7 +88,7 @@ function OtpConfirm(props: OptPropsType, ref: Ref<OtpRef>) {
     try {
       const url = `${import.meta.env.VITE_SERVER_URL}:${
         import.meta.env.VITE_SERVER_PORT
-      }/${import.meta.env.VITE_SEND_OTP_API}`;
+      }/${import.meta.env.VITE_RESEND_OTP_API}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
