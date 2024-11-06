@@ -1,8 +1,12 @@
 {
-  "name": "Server",
+  "name": "server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "start": "node main.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.21.1",
@@ -12,6 +16,7 @@
     "pg-hstore": "^2.3.4"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.7"
   }
 }
