@@ -7,7 +7,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ChatPropsType } from "@/utils/Type";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { ArrowLeft, Paperclip, Send, Smile } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  CheckCheck,
+  Paperclip,
+  Send,
+  Smile,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type MessageType = {
@@ -148,7 +155,7 @@ export default function Chat(props: ChatPropsType) {
       <CardContent>
         <ScrollArea className="h-[calc(100vh-400px)] mb-4 -mr-4 pr-4">
           {messages.map((message, index) => {
-            message.isSeen = true;
+            message.isSeen = message.isMine ? false : true;
             return (
               <>
                 <p className="px-1">
@@ -183,15 +190,23 @@ export default function Chat(props: ChatPropsType) {
                       <p>{message.content}</p>
                     )}
                   </div>
-                  <span
-                    className={`text-xs opacity-70 mt-1 block px-1 ${
-                      message.isMine && "text-end"
-                    }`}
-                  >
-                    {message.timestamp}
-                  </span>
+                  <div className="flex">
+                    {message.isMine && message.isSeen ? (
+                      <CheckCheck className="w-5 h-5" />
+                    ) : message.isMine && !message.isSeen ? (
+                      <Check className="w-5 h-5" />
+                    ) : (
+                      ""
+                    )}
+                    <span
+                      className={`text-xs opacity-70 mt-1 block px-1 ${
+                        message.isMine && "text-end"
+                      }`}
+                    >
+                      {message.timestamp}
+                    </span>
+                  </div>
                 </div>
-                {!message.isMine && message.isSeen}
               </>
             );
           })}

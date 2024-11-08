@@ -24,8 +24,10 @@ const data: NoticePropsType[] = [
 export default function Notifications() {
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto">
-        <h1>Nouveau</h1>
+      <div className="container mx-auto">
+        <h1 className="text-2xl font-bold mb-4 text-foreground">
+          Notifications
+        </h1>
         <div className="mt-3">
           {data &&
             data.length &&

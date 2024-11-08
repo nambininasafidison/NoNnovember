@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthProvider";
 import Layout from "@/layouts/Layout";
-import { HelpCircle, Search, Settings } from "lucide-react";
+import { HelpCircle, HelpingHand, Search, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -97,7 +97,7 @@ export default function Menu() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredMenus.map((menu) => (
-            <Link to={menu.link}>
+            <Link to={menu.link} key={menu.id + menu.link}>
               <Card key={menu.id} className="bg-slate-800 border-slate-700">
                 <CardHeader>
                   <div className="w-16 my-5">
@@ -124,6 +124,21 @@ export default function Menu() {
             </div>
           </Link>
           <Separator className="my-5" />
+
+          <Link to={"/supportGroups"}>
+            <div className="flex gap-4 w-fit text-xl items-center">
+              <HelpingHand className="h-12 w-12" />
+              Groupe de soutien
+            </div>
+          </Link>
+          <Separator className="my-5" />
+          <Link to={"/profile"}>
+            <div className="flex gap-4 w-fit text-xl items-center">
+              <User className="h-12 w-12" />
+              Profile d'utilisateur{" "}
+            </div>
+          </Link>
+          <Separator className="my-5" />
           <Link to={"/settings"}>
             <div className="flex gap-4 w-fit text-xl items-center">
               <Settings className="h-12 w-12" />
@@ -134,7 +149,7 @@ export default function Menu() {
           <AlertDialogDemo
             label="Se déconnecter"
             title="Êtes-vous sûr de vouloir vous déconnecter ?"
-            className="text-xl text-muted-foreground bg-muted p-5 px-8"
+            className="text-xl text-background bg-foreground p-6 px-8"
             alertStatus={() => {
               clearTokens();
             }}

@@ -1,5 +1,4 @@
-
-
+import AvatarPicker from "@/components/AvatarPicker";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +23,22 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import Layout from "@/layouts/Layout";
+import { avatars } from "@/utils/avatars";
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
   const [theme, setTheme] = useState("dark");
+  const [selectedAvatar, setSelectedAvatar] = useState<string | undefined>(
+    undefined
+  );
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+
+  const handleAvatarSelect = (avatar: string) => {
+    setSelectedAvatar(avatar);
+    console.log("Avatar sélectionné:", avatar);
+  };
 
   return (
     <Layout>
@@ -59,13 +68,23 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage
-                      src="/placeholder.svg?height=80&width=80"
-                      alt="Avatar"
-                    />
+                    <AvatarImage src={selectedAvatar} alt="Avatar" />
                     <AvatarFallback>UN</AvatarFallback>
                   </Avatar>
-                  <Button>Changer l&apos;avatar</Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => setIsPickerOpen(!isPickerOpen)}
+                  >
+                    {isPickerOpen
+                      ? "Appliquer le changement"
+                      : "Changer l'avatar"}
+                  </Button>
+                  {isPickerOpen && (
+                    <AvatarPicker
+                      avatars={avatars}
+                      onSelect={handleAvatarSelect}
+                    />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="username" className="text-slate-200">

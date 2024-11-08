@@ -66,7 +66,7 @@ export default function Feed() {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto">
+      <div className="container mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-4 text-foreground">
             Fil d&apos;actualité

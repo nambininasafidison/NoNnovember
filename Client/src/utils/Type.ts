@@ -64,3 +64,8 @@ export type DiscussionPropsType = {
   onChangeOpen: (status: boolean) => void;
   onChangeSelected: (value: ConversationType) => void;
 };
+
+export type AvatarPickerProps = {
+  avatars: string[];
+  onSelect: (avatar: string) => void;
+};

@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -61,7 +59,7 @@ export default function IndividualPost() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
+    <div className="container mx-auto px-4 py-8">
       <Card className="bg-slate-800 border-slate-700 mb-8">
         <CardHeader>
           <div className="flex items-center space-x-4">

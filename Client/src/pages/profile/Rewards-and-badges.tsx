@@ -10,6 +10,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Layout from "@/layouts/Layout";
 import {
   Award,
   BookOpen,
@@ -92,121 +93,127 @@ export default function RewardsAndBadges() {
   const unearnedBadges = badges.filter((badge) => !badge.earned);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-slate-200">
-        Récompenses et Badges
-      </h1>
+    <Layout>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+          Récompenses et Badges
+        </h1>
 
-      <Card className="bg-slate-800 border-slate-700 mb-8">
-        <CardHeader>
-          <CardTitle className="text-slate-200">
-            Vos Points Stellaires
-          </CardTitle>
-          <CardDescription className="text-slate-400">
-            Gagnez des points en participant activement à la communauté
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl font-bold text-slate-200">{points}</span>
-            <span className="text-sm text-slate-400">
-              Prochain palier : 1000
-            </span>
-          </div>
-          <Progress value={(points % 1000) / 10} className="w-full" />
-        </CardContent>
-      </Card>
+        <Card className="bg-slate-800 border-slate-700 mb-8">
+          <CardHeader>
+            <CardTitle className="text-slate-200">
+              Vos Points Stellaires
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              Gagnez des points en participant activement à la communauté
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-2xl font-bold text-slate-200">
+                {points}
+              </span>
+              <span className="text-sm text-slate-400">
+                Prochain palier : 1000
+              </span>
+            </div>
+            <Progress value={(points % 1000) / 10} className="w-full" />
+          </CardContent>
+        </Card>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-4">
-          <TabsTrigger value="badges">Badges</TabsTrigger>
-          <TabsTrigger value="rewards">Récompenses</TabsTrigger>
-        </TabsList>
-        <TabsContent value="badges">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-slate-800 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-slate-200">Badges Gagnés</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[300px] pr-4">
-                  {earnedBadges.map((badge) => (
-                    <div
-                      key={badge.id}
-                      className="flex items-center space-x-4 mb-4"
-                    >
-                      <badge.icon className="w-8 h-8 text-yellow-500" />
-                      <div>
-                        <p className="font-semibold text-slate-200">
-                          {badge.name}
-                        </p>
-                        <p className="text-sm text-slate-400">
-                          {badge.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </ScrollArea>
-              </CardContent>
-            </Card>
-            <Card className="bg-slate-800 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-slate-200">
-                  Badges à Débloquer
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[300px] pr-4">
-                  {unearnedBadges.map((badge) => (
-                    <div
-                      key={badge.id}
-                      className="flex items-center space-x-4 mb-4"
-                    >
-                      <badge.icon className="w-8 h-8 text-slate-500" />
-                      <div>
-                        <p className="font-semibold text-slate-200">
-                          {badge.name}
-                        </p>
-                        <p className="text-sm text-slate-400">
-                          {badge.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        <TabsContent value="rewards">
-          <div className="grid md:grid-cols-3 gap-6">
-            {rewards.map((reward) => (
-              <Card key={reward.id} className="bg-slate-800 border-slate-700">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="mb-4">
+            <TabsTrigger value="badges">Badges</TabsTrigger>
+            <TabsTrigger value="rewards">Récompenses</TabsTrigger>
+          </TabsList>
+          <TabsContent value="badges">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="bg-slate-800 border-slate-700">
                 <CardHeader>
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-slate-200">
-                      {reward.name}
-                    </CardTitle>
-                    <reward.icon className="w-8 h-8 text-blue-500" />
-                  </div>
+                  <CardTitle className="text-slate-200">
+                    Badges Gagnés
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-400">{reward.description}</p>
+                  <ScrollArea className="h-[300px] pr-4">
+                    {earnedBadges.map((badge) => (
+                      <div
+                        key={badge.id}
+                        className="flex items-center space-x-4 mb-4"
+                      >
+                        <badge.icon className="w-8 h-8 text-yellow-500" />
+                        <div>
+                          <p className="font-semibold text-slate-200">
+                            {badge.name}
+                          </p>
+                          <p className="text-sm text-slate-400">
+                            {badge.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </ScrollArea>
                 </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full"
-                    onClick={() => setPoints(points - reward.cost)}
-                    disabled={points < reward.cost}
-                  >
-                    Échanger ({reward.cost} points)
-                  </Button>
-                </CardFooter>
               </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-slate-200">
+                    Badges à Débloquer
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[300px] pr-4">
+                    {unearnedBadges.map((badge) => (
+                      <div
+                        key={badge.id}
+                        className="flex items-center space-x-4 mb-4"
+                      >
+                        <badge.icon className="w-8 h-8 text-slate-500" />
+                        <div>
+                          <p className="font-semibold text-slate-200">
+                            {badge.name}
+                          </p>
+                          <p className="text-sm text-slate-400">
+                            {badge.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          <TabsContent value="rewards">
+            <div className="grid md:grid-cols-3 gap-6">
+              {rewards.map((reward) => (
+                <Card key={reward.id} className="bg-slate-800 border-slate-700">
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-slate-200">
+                        {reward.name}
+                      </CardTitle>
+                      <reward.icon className="w-8 h-8 text-blue-500" />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-slate-400">{reward.description}</p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full"
+                      onClick={() => setPoints(points - reward.cost)}
+                      disabled={points < reward.cost}
+                    >
+                      Échanger ({reward.cost} points)
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </Layout>
   );
 }
