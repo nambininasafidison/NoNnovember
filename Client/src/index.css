@@ -4,58 +4,65 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* Couleurs principales */
+    --background: 220, 15%, 95%; /* Fond général (clair mais moins éclatant) */
+    --foreground: 220, 10%, 25%; /* Couleur du texte en avant-plan (sombre) */
+    --card: 210, 10%, 92%; /* Fond des cartes (clair mais moins éclatant) */
+    --card-foreground: 220, 10%, 25%; /* Texte dans les cartes (sombre) */
+    --popover: 210, 15%, 88%; /* Fond pour les éléments popover (clair) */
+    --popover-foreground: 220, 10%, 30%; /* Texte dans les popovers (légèrement sombre) */
+    --primary: 217, 33%, 17%; /* Couleur primaire améliorée pour le mode clair */
+    --primary-foreground: 0, 0%, 100%; /* Texte ou icônes primaires (blanc) */
+    --secondary: 220, 15%, 80%; /* Fond des boutons et éléments secondaires (clair) */
+    --secondary-foreground: 210, 70%, 45%; /* Texte sur les boutons secondaires (bleu légèrement plus foncé) */
+    --muted: 220, 10%, 60%; /* Couleur de texte muet (gris) */
+    --muted-foreground: 220, 10%, 45%; /* Texte en avant-plan muet (gris foncé) */
+    --accent: 220 20% 25%; /* Couleur d'accentuation (bleu-vert plus foncé) */
+    --accent-foreground: 0, 0%, 100%; /* Texte en avant-plan pour les éléments accentués (blanc) */
+    --destructive: 0, 70%, 45%; /* Couleur de l'action destructrice (rouge plus foncé) */
+    --destructive-foreground: 0, 0%, 100%; /* Texte sur les boutons destructeurs (blanc) */
+    --border: 210, 20%, 80%; /* Bordures (gris clair) */
+    --input: 0, 0%, 98%; /* Arrière-plan des champs d'entrée (très léger) */
+    --ring: 210, 70%, 45%; /* Couleur de l'anneau ou du contour de focus (bleu plus foncé) */
+    --radius: 0.5rem; /* Rayon de bordure arrondie */
+
+    /* Couleurs des graphiques */
+    --chart-1: 210, 70%, 45%; /* Couleur principale des graphiques */
+    --chart-2: 40, 85%, 55%; /* Couleur supplémentaire (jaune plus doux) */
+    --chart-3: 0, 65%, 50%; /* Couleur supplémentaire (rouge légèrement plus doux) */
+    --chart-4: 120, 60%, 40%; /* Couleur supplémentaire (vert plus doux) */
+    --chart-5: 280, 55%, 45%; /* Couleur supplémentaire (violet légèrement plus doux) */
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Palette de couleurs sombre */
+    --background: 222, 64%, 12%; /* Fond général (bleu foncé) */
+    --foreground: 0 0% 100%; /* Couleur du texte en avant-plan (gris) */
+    --card: 207, 40%, 15%; /* Fond des cartes (bleu plus foncé) */
+    --card-foreground: 38, 5%, 57%; /* Texte dans les cartes (gris) */
+    --popover: 207, 41%, 25%; /* Fond pour les éléments popover */
+    --popover-foreground: 160, 1%, 61%; /* Texte dans les popovers (gris clair) */
+    --primary: 222, 47%, 11%; /* Couleur primaire (bleu foncé) */
+    --primary-foreground: 38, 5%, 57%; /* Texte ou icônes primaires (gris) */
+    --secondary: 40, 11%, 73%; /* Fond des boutons et éléments secondaires (gris clair) */
+    --secondary-foreground: 207, 40%, 25%; /* Texte sur les boutons secondaires (bleu foncé) */
+    --muted: 207, 40%, 15%; /* Couleur de texte muet (gris foncé) */
+    --muted-foreground: 38, 5%, 57%; /* Texte en avant-plan muet (gris) */
+    --accent: 208, 42%, 24%; /* Couleur d'accentuation (bleu profond) */
+    --accent-foreground: 36, 6%, 59%; /* Texte en avant-plan pour les éléments accentués (gris clair) */
+    --destructive: 0, 84%, 60%; /* Couleur de l'action destructrice (rouge vif) */
+    --destructive-foreground: 0, 0%, 100%; /* Texte sur les boutons destructeurs (blanc) */
+    --border: 207, 40%, 15%; /* Bordures (bleu foncé) */
+    --input: 207, 41%, 25%; /* Arrière-plan des champs d'entrée */
+    --ring: 208, 42%, 24%; /* Couleur de l'anneau ou du contour de focus */
+    --radius: 0.5rem; /* Rayon de bordure arrondie */
+
+    /* Couleurs des graphiques */
+    --chart-1: 207, 41%, 25%; /* Couleur principale des graphiques */
+    --chart-2: 40, 11%, 73%; /* Couleur supplémentaire (gris clair) */
+    --chart-3: 0, 84%, 60%; /* Couleur supplémentaire (rouge) */
+    --chart-4: 160, 1%, 61%; /* Couleur supplémentaire (vert) */
+    --chart-5: 280, 60%, 50%; /* Couleur supplémentaire (violet) */
   }
 }
 
