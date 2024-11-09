@@ -89,7 +89,7 @@ export default function InteractiveGames() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+        <h1 className="text-3xl font-bold mb-8 text-foreground">
           Jeux Interactifs
         </h1>
 
@@ -119,7 +119,10 @@ export default function InteractiveGames() {
                     <Badge variant="secondary">{game.difficulty}</Badge>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full" asChild>
+                    <Button
+                      className="w-full bg-foreground text-background hover:bg-primary hover:text-muted-foreground"
+                      asChild
+                    >
                       <Link to={game.link}>Jouer</Link>
                     </Button>
                   </CardFooter>

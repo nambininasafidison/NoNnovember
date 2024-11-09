@@ -245,7 +245,7 @@ export default function Search() {
           className="p-2 bg-none border-none text-xl py-5"
         />
       </div>
-      <h1 className="text-3xl font-bold mb-8 text-slate-200">Resultat</h1>
+      <h1 className="text-3xl font-bold mb-8 text-slate-200">Resultats</h1>
 
       <Tabs
         value={activeTab}

@@ -17,6 +17,7 @@ import Notifications from "./pages/journals/Notifications";
 import CreatePost from "./pages/posts/Create-post";
 import Feed from "./pages/posts/Feed";
 import IndividualPost from "./pages/posts/Individual-post";
+import PersonalSpace from "./pages/profile/PersonalSpace";
 import RewardsAndBadges from "./pages/profile/Rewards-and-badges";
 import Settings from "./pages/profile/Settings";
 import UserProfilePublic from "./pages/profile/User-profile-public";
@@ -24,7 +25,6 @@ import EventCalendar from "./pages/ressources/Event-calendar";
 import Menu from "./pages/ressources/Menu";
 import PageNotFound from "./pages/ressources/PageNotFound";
 import Resources from "./pages/ressources/Resources";
-import PersonalSpace from "./pages/profile/PersonalSpace";
 import Search from "./pages/ressources/Search";
 
 const Home = lazy(() => import("@/pages/authentications/Home"));

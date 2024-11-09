@@ -1,3 +1,5 @@
+import meghan from "@/assets/Meghan.mp3";
+import no from "@/assets/NO.mp3";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,8 +14,6 @@ import { Slider } from "@/components/ui/slider";
 import Layout from "@/layouts/Layout";
 import { Pause, Play, SkipBack, SkipForward, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import meghan from "@/assets/Meghan.mp3";
-import no from "@/assets/NO.mp3";
 
 const meditations = [
   {
@@ -58,13 +58,13 @@ export default function GuidedMeditation() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
-  const [selectedAudio, setSelectedAudio] = useState(meditations[0].audioSrc); // Par défaut, commencer avec la première méditation
+  const [selectedAudio, setSelectedAudio] = useState(meditations[0]); // Par défaut, commencer avec la première méditation
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
-      audioRef.current.src = selectedAudio; // Mettre à jour la source audio chaque fois que la méditation change
+      audioRef.current.src = selectedAudio.audioSrc; // Mettre à jour la source audio chaque fois que la méditation change
       audioRef.current.load(); // Recharger le fichier audio
     }
   }, [volume, selectedAudio]);
@@ -109,7 +109,7 @@ export default function GuidedMeditation() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+        <h1 className="text-3xl font-bold mb-8 text-foreground">
           Méditation Guidée
         </h1>
 
@@ -123,7 +123,7 @@ export default function GuidedMeditation() {
             <CardContent>
               <div className="text-center mb-4">
                 <h2 className="text-xl font-semibold text-slate-200">
-                  Respiration Spatiale
+                  {selectedAudio.title}
                 </h2>
                 <p className="text-slate-400">{formatTime(duration)}</p>
               </div>
@@ -146,7 +146,7 @@ export default function GuidedMeditation() {
                 value={[currentTime]}
                 max={duration}
                 step={1}
-                className="mb-2"
+                className="mb-2 bg-secondary"
                 onValueChange={(value) => {
                   if (audioRef.current) {
                     audioRef.current.currentTime = value[0];
@@ -165,9 +165,8 @@ export default function GuidedMeditation() {
                   value={[volume * 100]}
                   max={100}
                   step={1}
-                  className="w-full"
+                  className="w-full bg-secondary"
                   onValueChange={(value) => {
-                    console.log(value);
                     setVolume(value[0] / 100);
                   }}
                 />
@@ -187,11 +186,10 @@ export default function GuidedMeditation() {
                   <Button
                     key={meditation.id}
                     variant="outline"
-                    className="w-full justify-start mb-5 h-10 text-left"
+                    className="w-full justify-start mb-5 h-10 text-left bg-accent border-none"
                     onClick={() => {
-                      console.log(meditation);
-                      setSelectedAudio(meditation.audioSrc);
-                    }} // Mettre à jour l'audio sélectionné
+                      setSelectedAudio(meditation);
+                    }}
                   >
                     <div className="space-y-3">
                       <p className="font-semibold text-slate-200">
@@ -211,7 +209,7 @@ export default function GuidedMeditation() {
 
         <audio
           ref={audioRef}
-          src={selectedAudio}
+          src={selectedAudio.audioSrc}
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
         />

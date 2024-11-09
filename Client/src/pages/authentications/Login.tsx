@@ -144,33 +144,36 @@ export default function Login() {
               />
             </form>
           </FormProvider>
-          {serverResponse && (
-            <JustAlert
-              title={serverResponse}
-              isOpen={isServerOpen}
-              variant="default"
-              onClose={() => setIsServerOpen(false)}
-            />
-          )}
-          {errorMessage && (
-            <JustAlert
-              title={errorMessage}
-              isOpen={isErrorOpen}
-              variant="destructive"
-              onClose={() => setIsErrorOpen(false)}
-            />
-          )}
-          {isLoading && <Loader />}
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex flex-col items-center justify-center gap-3">
           <p className="text-sm text-slate-400">
             Pas encore de compte ?{" "}
             <Link to="/register" className="text-blue-400 hover:underline">
               S&apos;inscrire
             </Link>
           </p>
+          <Link to="/" className="text-secondary">
+            Accueil
+          </Link>
         </CardFooter>
       </Card>
+      {serverResponse && (
+        <JustAlert
+          title={serverResponse}
+          isOpen={isServerOpen}
+          variant="default"
+          onClose={() => setIsServerOpen(false)}
+        />
+      )}
+      {errorMessage && (
+        <JustAlert
+          title={errorMessage}
+          isOpen={isErrorOpen}
+          variant="destructive"
+          onClose={() => setIsErrorOpen(false)}
+        />
+      )}
+      {isLoading && <Loader />}
     </div>
   );
 }

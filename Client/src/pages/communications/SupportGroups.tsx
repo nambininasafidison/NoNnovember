@@ -86,7 +86,7 @@ export default function SupportGroups() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+        <h1 className="text-3xl font-bold mb-8 text-foreground">
           Groupes de Soutien
         </h1>
 
@@ -103,7 +103,7 @@ export default function SupportGroups() {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="hover:bg-muted">
                 <Plus className="w-4 h-4 mr-2" />
                 Créer un Groupe
               </Button>
@@ -163,8 +163,8 @@ export default function SupportGroups() {
                       Privé
                     </Badge>
                   ) : (
-                    <Badge variant="outline">
-                      <Unlock className="w-4 h-4 mr-1" />
+                    <Badge variant="outline" className="text-secondary">
+                      <Unlock className="w-4 h-4 mr-1 " />
                       Public
                     </Badge>
                   )}
@@ -178,7 +178,9 @@ export default function SupportGroups() {
                 <Badge className="pb-1">{group.category}</Badge>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Rejoindre le Groupe</Button>
+                <Button className="w-full bg-background text-foreground hover:bg-secondary">
+                  Rejoindre le Groupe
+                </Button>
               </CardFooter>
             </Card>
           ))}

@@ -75,7 +75,7 @@ export default function Mentorship() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+        <h1 className="text-3xl font-bold mb-8 text-foreground">
           Programme de Mentorat
         </h1>
 
@@ -144,7 +144,12 @@ export default function Mentorship() {
                   <CardFooter>
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button className="w-full">Réserver une Session</Button>
+                        <Button
+                          variant={"secondary"}
+                          className="w-full hover:bg-muted"
+                        >
+                          Réserver une Session
+                        </Button>
                       </DialogTrigger>
                       <DialogContent className="bg-slate-800 text-slate-200">
                         <DialogHeader>
@@ -185,7 +190,10 @@ export default function Mentorship() {
                           </div>
                         </div>
                         <DialogFooter>
-                          <Button type="submit">
+                          <Button
+                            type="submit"
+                            className="bg-foreground text-background hover:bg-secondary hover:text-secondary-foreground"
+                          >
                             Confirmer la Réservation
                           </Button>
                         </DialogFooter>
@@ -205,7 +213,7 @@ export default function Mentorship() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[400px] pr-4">
+                <ScrollArea className="h-[55vh] pr-4">
                   {[...Array(3)].map((_, index) => (
                     <Card
                       key={index}
@@ -216,7 +224,9 @@ export default function Mentorship() {
                           <CardTitle className="text-slate-200">
                             Session avec {mentors[index % mentors.length].name}
                           </CardTitle>
-                          <Badge variant="outline">À venir</Badge>
+                          <Badge variant="secondary" className="hover:bg-muted">
+                            À venir
+                          </Badge>
                         </div>
                       </CardHeader>
                       <CardContent>
@@ -233,7 +243,12 @@ export default function Mentorship() {
                           <MessageSquare className="w-4 h-4 mr-2" />
                           Contacter
                         </Button>
-                        <Button variant="destructive">Annuler</Button>
+                        <Button
+                          variant="destructive"
+                          className="hover:bg-primary"
+                        >
+                          Annuler
+                        </Button>
                       </CardFooter>
                     </Card>
                   ))}

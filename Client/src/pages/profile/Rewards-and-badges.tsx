@@ -95,7 +95,7 @@ export default function RewardsAndBadges() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">
+        <h1 className="text-3xl font-bold mb-8 text-foreground">
           Récompenses et Badges
         </h1>
 

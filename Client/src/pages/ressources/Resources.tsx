@@ -73,7 +73,7 @@ export default function Resources() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-slate-200">Ressources</h1>
+        <h1 className="text-3xl font-bold mb-8 text-foreground">Ressources</h1>
 
         <div className="mb-6">
           <div className="relative">
@@ -108,12 +108,14 @@ export default function Resources() {
                   <Button
                     key={resource.id}
                     variant="outline"
-                    className="w-full justify-start mb-4 h-10 text-left"
+                    className="w-full justify-start mb-4 h-10 text-left bg-accent border-none"
                   >
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 text-slate-200">
                       <ResourceIcon type={resource.type} />
                       <div>
-                        <p className="font-semibold">{resource.title}</p>
+                        <p className="font-semibold text-slate-200">
+                          {resource.title}
+                        </p>
                         <div className="flex space-x-2 mt-1">
                           <Badge variant="secondary">{resource.type}</Badge>
                           <Badge>{resource.category}</Badge>
