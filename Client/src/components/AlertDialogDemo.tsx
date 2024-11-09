@@ -12,12 +12,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AlertType } from "@/utils/Type";
+import { Send } from "lucide-react";
 
 export function AlertDialogDemo(props: AlertType) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button type="submit" className={cn("w-fit", props.className)}>
+          {props.label === "Publier" && <Send className="w-4 h-4 mr-2" />}
           {props.label}
         </Button>
       </AlertDialogTrigger>
@@ -28,7 +30,10 @@ export function AlertDialogDemo(props: AlertType) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Annuler</AlertDialogCancel>
-          <AlertDialogAction onClick={() => props.alertStatus()}>
+          <AlertDialogAction
+            onClick={() => props.alertStatus()}
+            className="bg-foreground text-background hover:bg-secondary-foreground hover:text-secondary"
+          >
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

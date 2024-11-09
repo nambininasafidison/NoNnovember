@@ -14,29 +14,34 @@ import Quiz from "./pages/games/Quiz";
 import Dashboard from "./pages/journals/Dashboard";
 import MoodJournal from "./pages/journals/Mood-journal";
 import Notifications from "./pages/journals/Notifications";
+import CreatePost from "./pages/posts/Create-post";
 import Feed from "./pages/posts/Feed";
-import Profile from "./pages/profile/Profile";
+import IndividualPost from "./pages/posts/Individual-post";
 import RewardsAndBadges from "./pages/profile/Rewards-and-badges";
 import Settings from "./pages/profile/Settings";
+import UserProfilePublic from "./pages/profile/User-profile-public";
 import EventCalendar from "./pages/ressources/Event-calendar";
 import Menu from "./pages/ressources/Menu";
 import PageNotFound from "./pages/ressources/PageNotFound";
 import Resources from "./pages/ressources/Resources";
+import PersonalSpace from "./pages/profile/PersonalSpace";
+import Search from "./pages/ressources/Search";
 
-const Authenticate = lazy(() => import("@/pages/authentications/Authenticate"));
-
+const Home = lazy(() => import("@/pages/authentications/Home"));
 export default function App() {
   const { status } = useAuth();
 
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        {!status ? (
+        {status ? (
           <>
             <Route path="/" element={<Feed />} />
             <Route path="/notification" element={<Notifications />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/" element={<PersonalSpace />} />
+            <Route path="/profilePublic/:id" element={<UserProfilePublic />} />
             <Route path="/quiz" element={<Quiz />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/supportGroups" element={<SupportGroups />} />
@@ -50,10 +55,12 @@ export default function App() {
             <Route path="/resources" element={<Resources />} />
             <Route path="/rewards" element={<RewardsAndBadges />} />
             <Route path="/discussions" element={<Discussions />} />
+            <Route path="/createPost" element={<CreatePost />} />
+            <Route path="/individualPost/:id" element={<IndividualPost />} />
           </>
         ) : (
           <>
-            <Route path="/s" element={<Authenticate />} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </>

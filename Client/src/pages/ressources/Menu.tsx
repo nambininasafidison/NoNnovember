@@ -13,7 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthProvider";
 import Layout from "@/layouts/Layout";
-import { HelpCircle, HelpingHand, Search, Settings, User } from "lucide-react";
+import {
+  HelpCircle,
+  HelpingHand,
+  Search,
+  Settings,
+  UserCog,
+} from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -134,8 +140,8 @@ export default function Menu() {
           <Separator className="my-5" />
           <Link to={"/profile"}>
             <div className="flex gap-4 w-fit text-xl items-center">
-              <User className="h-12 w-12" />
-              Profile d'utilisateur{" "}
+              <UserCog className="h-12 w-12" />
+              Espace Personnel{" "}
             </div>
           </Link>
           <Separator className="my-5" />
@@ -149,7 +155,7 @@ export default function Menu() {
           <AlertDialogDemo
             label="Se déconnecter"
             title="Êtes-vous sûr de vouloir vous déconnecter ?"
-            className="text-xl text-background bg-foreground p-6 px-8"
+            className="text-xl text-background bg-foreground hover:text-secondary, hover:bg-secondary-foreground p-6 px-8"
             alertStatus={() => {
               clearTokens();
             }}

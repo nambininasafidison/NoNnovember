@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/contexts/AuthProvider";
 import { useTheme } from "@/contexts/ThemeProvider";
 import {
   Bell,
@@ -22,6 +23,7 @@ import { Link } from "react-router-dom";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { theme, setTheme } = useTheme();
+  const { id } = useAuth();
 
   return (
     <div className={`min-h-screen bg-background`}>
@@ -53,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <HelpingHand className="h-6 w-6" />
             </Button>
           </Link>
-          <Link to="/profile">
+          <Link to={"/profilePublic/" + id}>
             <Button variant="ghost" size="icon" className="text-foreground">
               <User className="h-6 w-6" />
             </Button>
@@ -88,10 +90,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Search
                 className={`absolute left-2 top-2.5 h-4 w-4 text-secondary`}
               />
-              <Input
-                placeholder="Rechercher..."
-                className={`pl-8 bg-muted border-border`}
-              />
+              <Link to="/search">
+                <Input
+                  placeholder="Rechercher..."
+                  className={`pl-8 bg-muted border-border`}
+                />
+              </Link>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -112,13 +116,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div>
                 <div className={`font-medium gap-3 text-foreground mb-1`}>
                   Astronaute
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge
+                    variant="secondary"
+                    className="ml-2 hover:bg-background hover:text-foreground"
+                  >
                     <Star className="h-3 w-3 mr-1" />
                     Pro
                   </Badge>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge
+                    variant="secondary"
+                    className="text-xs hover:bg-background hover:text-foreground"
+                  >
                     Niveau 11
                   </Badge>
                   <Progress value={45} className="w-20 h-2 bg-muted" />

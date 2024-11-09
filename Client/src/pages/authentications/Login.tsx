@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AlertDialogDemo } from "@/components/AlertDialogDemo";
+import JustAlert from "@/components/JustAlert";
+import Loader from "@/components/Loader";
 import {
   Card,
   CardContent,
@@ -8,17 +8,81 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Rocket, Lock } from "lucide-react";
+import { useAuth } from "@/contexts/AuthProvider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Rocket } from "lucide-react";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { z } from "zod";
+
+const schema = z.object({
+  email: z.string().email("Adresse email invalide"),
+  password: z.string().min(8, {
+    message: "Mot de passe requis et doit être au moins 8 caractères",
+  }),
+});
+type FormData = z.infer<typeof schema>;
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [serverResponse, setServerResponse] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isServerOpen, setIsServerOpen] = useState<boolean>(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+  const { setTokens } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Ici, vous implémenteriez la logique de connexion
-    console.log("Tentative de connexion avec:", email, password);
+  const methods = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
+
+  const onSubmit = async (data: FormData) => {
+    setServerResponse(null);
+    setErrorMessage(null);
+    setIsLoading(true);
+    try {
+      const url = `${import.meta.env.VITE_SERVER_URL}:${
+        import.meta.env.VITE_SERVER_PORT
+      }/${import.meta.env.VITE_SIGNIN_API}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'authentification");
+      }
+      const responseData = await response.json();
+      setTokens(responseData);
+      reset();
+      setServerResponse(responseData.message || "Authentification réussie");
+      setIsServerOpen(true);
+      if (!responseData.message && !isServerOpen) {
+        window.location.href = "/";
+      }
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Une erreur inconnue est survenue"
+      );
+      setIsErrorOpen(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,46 +95,80 @@ export default function Login() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form onSubmit={handleLogin}>
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-200">
-                Adresse e-mail
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="astronaute@espace.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-slate-700 border-slate-600 text-slate-200"
-                required
+          <FormProvider {...methods}>
+            <form
+              action=""
+              method="post"
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+              className="w-full space-y-6 mt-16"
+            >
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-200">
+                  Adresse e-mail
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="astronaute@espace.com"
+                  {...register("email")}
+                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  required
+                />
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-slate-200">
+                  Mot de passe
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password")}
+                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  required
+                />
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
+              </div>
+              <AlertDialogDemo
+                label="Connexion"
+                title="Etes vous sur de se connecter ?"
+                className="text-md p-6 gap-4 mt-32 w-full"
+                alertStatus={async () => {
+                  handleSubmit(onSubmit)();
+                }}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-200">
-                Mot de passe
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-slate-700 border-slate-600 text-slate-200"
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full mt-4">
-              <Lock className="w-4 h-4 mr-2" />
-              Se connecter
-            </Button>
-          </form>
+            </form>
+          </FormProvider>
+          {serverResponse && (
+            <JustAlert
+              title={serverResponse}
+              isOpen={isServerOpen}
+              variant="default"
+              onClose={() => setIsServerOpen(false)}
+            />
+          )}
+          {errorMessage && (
+            <JustAlert
+              title={errorMessage}
+              isOpen={isErrorOpen}
+              variant="destructive"
+              onClose={() => setIsErrorOpen(false)}
+            />
+          )}
+          {isLoading && <Loader />}
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-slate-400">
             Pas encore de compte ?{" "}
-            <a href="/register" className="text-blue-400 hover:underline">
+            <Link to="/register" className="text-blue-400 hover:underline">
               S&apos;inscrire
-            </a>
+            </Link>
           </p>
         </CardFooter>
       </Card>

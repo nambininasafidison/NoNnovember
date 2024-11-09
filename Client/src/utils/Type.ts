@@ -26,29 +26,42 @@ export interface OtpRef {
 }
 
 export type CommentType = {
-  image?: string;
-  like: number;
-  text: string;
+  commentId: string;
+  commentator: {
+    username: string;
+    avatar: string;
+  };
+  body: string;
+  files?: string[];
+  isFile?: boolean;
+  likes: string[];
 };
 
 export type PostPropsType = {
-  username: string;
-  time: string;
-  description: string;
-  like: number;
-  avatar: string;
-  images?: string[];
-  comments?: CommentType[];
+  postId: string;
+  author: {
+    authorId: string;
+    authorName: string;
+    avatar: string;
+  };
+  timestamp: string;
+  body: string;
+  likes: string[];
+  supporters: string[];
+  files?: string[];
+  commentsNumber: number;
 };
 export type NoticePropsType = {
-  time: string;
-  description: string;
-  avatar: string;
-  images?: string[];
+  senderName: string;
+  timestamp: string;
+  content: string;
+  users: {
+    avatar: string;
+  };
 };
 
 export type ConversationType = {
-  id: number;
+  id: string;
   name: string;
   avatar: string;
   isGroup: boolean;
@@ -68,4 +81,30 @@ export type DiscussionPropsType = {
 export type AvatarPickerProps = {
   avatars: string[];
   onSelect: (avatar: string) => void;
+};
+
+export type PhotoType = {
+  id: string;
+  src: string;
+  alt: string;
+  likes: string[];
+  comments: number;
+  body: string;
+};
+
+export type FriendType = { id: string; status: string };
+
+export type UserProfileType = {
+  userId: string;
+  email: string;
+  name: string;
+  gender: string;
+  userAccountType: string;
+  avatar: string;
+  bio: string;
+  location: string;
+  occupation: string;
+  joinDate: string;
+  friends: FriendType[];
+  postsNumber: number;
 };

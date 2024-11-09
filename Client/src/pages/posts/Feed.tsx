@@ -7,31 +7,36 @@ import { Separator } from "@/components/ui/separator";
 import { PostPropsType } from "@/utils/Type";
 import { MessageCircle, Star } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../../layouts/Layout";
 
 const data: PostPropsType[] = [
   {
-    username: "Astronaute Anonyme",
-    time: "Il y a 2 heures",
-    description: `Aujourd'hui marque une étape importante dans mon parcours 
+    postId: "fdgdfg",
+    author: {
+      authorId: "sdsad",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 2 heures",
+    body: `Aujourd'hui marque une étape importante dans mon parcours 
                 Après des mois de thérapie et le soutien de cette incroyable
                 communauté, je me sens enfin mieux. N'oubliez pas,
                 c'est normal de demander de l'aide.`,
-    like: 15,
-    avatar: "",
-    images: [p3, ""],
-    comments: [
-      { image: "", like: 1, text: "Nice" },
-      { image: "", like: 1, text: "Good" },
-      { image: "", like: 1, text: "Cool" },
-      { image: "", like: 1, text: "Pretty" },
-      { image: "", like: 1, text: "Fine" },
-    ],
+    likes: ["15"],
+    supporters: ["15"],
+    files: [p3],
+    commentsNumber: 87,
   },
   {
-    username: "Mentor Positif",
-    time: "Il y a 5 heures",
-    description: `Astuce du jour : Essayez la technique de respiration 4-7-8 quand
+    postId: "ghfgdf",
+    author: {
+      authorId: "sdsakjhd",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 5 heures",
+    body: `Astuce du jour : Essayez la technique de respiration 4-7-8 quand
                 vous vous sentez anxieux :
                 <br />
                 1. Inspirez pendant 4 secondes
@@ -42,18 +47,97 @@ const data: PostPropsType[] = [
                 <br />
                 Répétez 4 fois. Cette technique peut vous aider à vous calmer
                 rapidement.`,
-    like: 0,
-    avatar: "",
-    images: [p1, p2, p3],
-    comments: [
-      { image: "", like: 1, text: "OMG" },
-      { image: "", like: 1, text: "LOL" },
-      { image: "", like: 1, text: "OH NO" },
-    ],
+    likes: [],
+    supporters: ["15"],
+    files: [p1, p2, p3],
+    commentsNumber: 223,
+  },
+  {
+    postId: "fdgdfg",
+    author: {
+      authorId: "sdsadalao",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 2 heures",
+    body: `Aujourd'hui marque une étape importante dans mon parcours 
+                Après des mois de thérapie et le soutien de cette incroyable
+                communauté, je me sens enfin mieux. N'oubliez pas,
+                c'est normal de demander de l'aide.`,
+    likes: ["15"],
+    supporters: ["15"],
+    files: [p3],
+    commentsNumber: 87,
+  },
+  {
+    postId: "ghfgdf",
+    author: {
+      authorId: "sds876ad",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 5 heures",
+    body: `Astuce du jour : Essayez la technique de respiration 4-7-8 quand
+                vous vous sentez anxieux :
+                <br />
+                1. Inspirez pendant 4 secondes
+                <br />
+                2. Retenez votre souffle pendant 7 secondes
+                <br />
+                3. Expirez pendant 8 secondes
+                <br />
+                Répétez 4 fois. Cette technique peut vous aider à vous calmer
+                rapidement.`,
+    likes: [],
+    supporters: ["15"],
+    files: [p1, p2, p3],
+    commentsNumber: 223,
+  },
+  {
+    postId: "fdgdfg",
+    author: {
+      authorId: "sdsacvd",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 2 heures",
+    body: `Aujourd'hui marque une étape importante dans mon parcours 
+                Après des mois de thérapie et le soutien de cette incroyable
+                communauté, je me sens enfin mieux. N'oubliez pas,
+                c'est normal de demander de l'aide.`,
+    likes: ["15"],
+    supporters: ["15"],
+    files: [p3],
+    commentsNumber: 87,
+  },
+  {
+    postId: "ghfgdf",
+    author: {
+      authorId: "sdsapqd",
+      authorName: "Astronaute Anonyme",
+      avatar: "",
+    },
+    timestamp: "Il y a 5 heures",
+    body: `Astuce du jour : Essayez la technique de respiration 4-7-8 quand
+                vous vous sentez anxieux :
+                <br />
+                1. Inspirez pendant 4 secondes
+                <br />
+                2. Retenez votre souffle pendant 7 secondes
+                <br />
+                3. Expirez pendant 8 secondes
+                <br />
+                Répétez 4 fois. Cette technique peut vous aider à vous calmer
+                rapidement.`,
+    likes: [],
+    supporters: ["15"],
+    files: [p1, p2, p3],
+    commentsNumber: 223,
   },
 ];
 
 export default function Feed() {
+  const [posts, setPosts] = useState<PostPropsType[]>(data);
   const [activeTabs, setActiveTabs] = useState<string[]>([]);
 
   const handleChangeTabs = (theme: string) => {
@@ -62,6 +146,20 @@ export default function Feed() {
     } else {
       setActiveTabs([...activeTabs, theme]);
     }
+  };
+
+  const handleChangeLikes = (value: string[], postId: string) => {
+    const updatedposts = posts.map((post) =>
+      post.postId === postId ? { ...post, likes: value } : post
+    );
+    setPosts([...updatedposts]);
+  };
+
+  const handleChangeSupporters = (value: string[], postId: string) => {
+    const updatedPosts = posts.map((post) =>
+      post.postId === postId ? { ...post, supporters: value } : post
+    );
+    setPosts([...updatedPosts]);
   };
 
   return (
@@ -92,48 +190,51 @@ export default function Feed() {
         </div>
         <Separator />
 
-        <div className="grid grid-cols-2 gap-4 py-4">
-          <Button
-            className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary"
-            variant="secondary"
-          >
-            <img
-              src="/placeholder.svg?height=40&width=40"
-              alt=""
-              className="w-10 h-10 mr-2"
-            />
-            Take Quiz
-          </Button>
-          <Button
-            className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary"
-            variant="secondary"
-          >
-            <img
-              src="/placeholder.svg?height=40&width=40"
-              alt=""
-              className="w-10 h-10 mr-2"
-            />
-            Create Post
-          </Button>
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4 py-4 w-full">
+          <Link to="/quiz">
+            <Button
+              className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary w-full"
+              variant="secondary"
+            >
+              <img
+                src="/placeholder.svg?height=40&width=40"
+                alt=""
+                className="w-10 h-10 mr-2"
+              />
+              Take Quiz
+            </Button>
+          </Link>
+          <Link to="/createPost">
+            <Button
+              className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary w-full"
+              variant="secondary"
+            >
+              <img
+                src="/placeholder.svg?height=40&width=40"
+                alt=""
+                className="w-10 h-10 mr-2"
+              />
+              Create Post
+            </Button>
+          </Link>
         </div>
         <Separator className="mb-4" />
 
-        <div className="space-y-4">
-          {data &&
-            data.length &&
-            [1, 2, 3, 4, 5].map(() =>
-              data.map((item) => (
-                <Post
-                  username={item.username}
-                  time={item.time}
-                  description={item.description}
-                  like={item.like}
-                  avatar={item.avatar}
-                  images={item.images}
-                  comments={item.comments}
-                />
-              ))
-            )}
+        <div className="space-y-6">
+          {posts &&
+            posts.length &&
+            posts.map((item, index) => (
+              <Post
+                key={index}
+                post={item}
+                onChangeLikes={(value, postId) =>
+                  handleChangeLikes(value, postId)
+                }
+                onChangeSupporters={(value, postId) =>
+                  handleChangeSupporters(value, postId)
+                }
+              />
+            ))}
         </div>
 
         {/* Quick Actions */}

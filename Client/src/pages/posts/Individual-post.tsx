@@ -1,141 +1,101 @@
+import p1 from "@/assets/16218.jpg";
+import p2 from "@/assets/16494.jpg";
+import p3 from "@/assets/72177.jpg";
+import AsHeader from "@/components/AsHeader";
+import AddComment from "@/components/sections/feed/AddComment";
+import Post from "@/components/sections/feed/Post";
+import { CommentType, PostPropsType } from "@/utils/Type";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Share2, Send } from "lucide-react";
 
 // Exemple de données pour un post
-const post = {
-  id: 1,
-  author: "AstronauteCool",
-  avatar: "/placeholder.svg?height=50&width=50",
-  content:
-    "Aujourd'hui, j'ai fait un grand pas dans ma gestion du stress. J'ai essayé une nouvelle technique de méditation et je me sens vraiment plus calme. Quelqu'un d'autre a essayé la méditation récemment ?",
-  likes: 15,
-  comments: 3,
-  category: "Bien-être",
+const initialPost: PostPropsType = {
+  postId: "ghfgdf",
+  author: {
+    authorId: "sdsaokyd",
+    authorName: "Astronaute Anonyme",
+    avatar: "",
+  },
+  timestamp: "Il y a 5 heures",
+  body: `Astuce du jour : Essayez la technique de respiration 4-7-8 quand
+              vous vous sentez anxieux :
+              <br />
+              1. Inspirez pendant 4 secondes
+              <br />
+              2. Retenez votre souffle pendant 7 secondes
+              <br />
+              3. Expirez pendant 8 secondes
+              <br />
+              Répétez 4 fois. Cette technique peut vous aider à vous calmer
+              rapidement.`,
+  likes: [],
+  supporters: ["15"],
+  files: [p1, p2, p3],
+  commentsNumber: 223,
 };
 
 // Exemple de commentaires
-const comments = [
+const initialComments: CommentType[] = [
   {
-    id: 1,
-    author: "ExplorateurStellar",
-    avatar: "/placeholder.svg?height=40&width=40",
-    content:
-      "Super ! La méditation m'aide beaucoup aussi. Quelle technique as-tu essayée ?",
+    commentId: "iodss",
+    commentator: {
+      username: "AstronauteCool",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
+    body: "Super ! La méditation m'aide beaucoup aussi. Quelle technique as-tu essayée ?",
+    files: [""],
+    likes: [""],
   },
   {
-    id: 2,
-    author: "VoyageurGalactique",
-    avatar: "/placeholder.svg?height=40&width=40",
-    content:
-      "J'aimerais essayer mais je ne sais pas par où commencer. Des conseils ?",
+    commentId: "iodsdsfdfss",
+    commentator: {
+      username: "AstrobiologisteExpert",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
+    body: "C'est une bonne idée! J'ai aussi essayé de faire du yoga. Est-ce que ça peut vous aider?",
+    files: [""],
+    likes: ["87"],
   },
   {
-    id: 3,
-    author: "PiloteInterstellaire",
-    avatar: "/placeholder.svg?height=40&width=40",
-    content: "Bravo pour cette initiative ! Continue comme ça !",
+    commentId: "iodslkjhkjhhkjs",
+    commentator: {
+      username: "ProfesseurPhilosophe",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
+    body: "Merci pour cette remarque! J'ai essayé de faire du yoga aussi. Est-ce que ça peut vous aider?",
+    files: [""],
+    likes: ["2"],
   },
 ];
 
 export default function IndividualPost() {
-  const [newComment, setNewComment] = useState("");
+  const [post, setPost] = useState<PostPropsType>(initialPost);
+  const [comments, setComments] = useState<CommentType[]>(initialComments);
+  const handleChangeLikes = (value: string[], commentId: string) => {
+    const updatedComments = comments.map((comment) =>
+      comment.commentId === commentId ? { ...comment, likes: value } : comment
+    );
+    setComments([...updatedComments]);
+  };
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Nouveau commentaire:", newComment);
-    setNewComment("");
+  const handleAddComment = (newCmt: CommentType) => {
+    setComments([...comments, newCmt]);
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="bg-slate-800 border-slate-700 mb-8">
-        <CardHeader>
-          <div className="flex items-center space-x-4">
-            <Avatar>
-              <AvatarImage src={post.avatar} alt={post.author} />
-              <AvatarFallback>
-                {post.author.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle className="text-slate-200">{post.author}</CardTitle>
-              <p className="text-sm text-slate-400">Il y a 2 heures</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-slate-300 mb-4">{post.content}</p>
-          <Badge variant="secondary">{post.category}</Badge>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="ghost" className="text-slate-400">
-            <Heart className="w-4 h-4 mr-2" />
-            {post.likes} J&apos;aime
-          </Button>
-          <Button variant="ghost" className="text-slate-400">
-            <MessageCircle className="w-4 h-4 mr-2" />
-            {post.comments} Commentaires
-          </Button>
-          <Button variant="ghost" className="text-slate-400">
-            <Share2 className="w-4 h-4 mr-2" />
-            Partager
-          </Button>
-        </CardFooter>
-      </Card>
-
-      <Card className="bg-slate-800 border-slate-700">
-        <CardHeader>
-          <CardTitle className="text-slate-200">Commentaires</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[300px] pr-4">
-            {comments.map((comment) => (
-              <div key={comment.id} className="flex space-x-4 mb-4">
-                <Avatar>
-                  <AvatarImage src={comment.avatar} alt={comment.author} />
-                  <AvatarFallback>
-                    {comment.author.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="font-semibold text-slate-200">
-                    {comment.author}
-                  </p>
-                  <p className="text-slate-300">{comment.content}</p>
-                </div>
-              </div>
-            ))}
-          </ScrollArea>
-        </CardContent>
-        <CardFooter>
-          <form onSubmit={handleCommentSubmit} className="w-full">
-            <div className="flex space-x-2">
-              <Textarea
-                placeholder="Ajouter un commentaire..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                className="flex-1 bg-slate-700 border-slate-600 text-slate-200"
-              />
-              <Button type="submit">
-                <Send className="w-4 h-4" />
-                <span className="sr-only">Envoyer</span>
-              </Button>
-            </div>
-          </form>
-        </CardFooter>
-      </Card>
+    <div className="container mx-auto px-4 py-24 space-y-5">
+      <AsHeader />
+      <Post
+        post={post}
+        onChangeLikes={(value) => setPost({ ...post, likes: value })}
+        onChangeSupporters={(value) => setPost({ ...post, supporters: value })}
+      />
+      <AddComment
+        comments={comments}
+        onChangeLikes={(value, commentId) =>
+          handleChangeLikes(value, commentId)
+        }
+        onAddComment={handleAddComment}
+      />
     </div>
   );
 }
