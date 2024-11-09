@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function Discussions() {
   const [selectedConversation, setSelectedConversation] =
-    useState<ConversationType>({ id: 0, name: "", avatar: "", isGroup: false });
+    useState<ConversationType>({ id: "", name: "", avatar: "", isGroup: false });
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (

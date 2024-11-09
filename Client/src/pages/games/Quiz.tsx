@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,12 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Layout from "@/layouts/Layout";
 import { Star } from "lucide-react";
-import { useState } from "react";
-import Layout from "../../layouts/Layout";
+import { useCallback, useState } from "react";
 
 interface QuizQuestion {
   type: "radio" | "checkbox" | "input" | "match";
@@ -71,14 +82,10 @@ const quizData: QuizQuestion[] = [
 ];
 
 const shuffleArray = <T,>(array: T[]): T[] => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+  return [...array].sort(() => Math.random() - 0.5);
 };
 
-export default function Quiz() {
+export default function Component() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<
     number | string | { [key: string]: string } | null
@@ -89,67 +96,73 @@ export default function Quiz() {
   const [inputAnswer, setInputAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [shuffledQuizData] = useState(() => shuffleArray(quizData));
 
-  const shuffledQuizData = shuffleArray(quizData);
+  const handleAnswer = useCallback(
+    (answer: number | string | { [key: string]: string }) => {
+      setSelectedAnswer(answer);
+    },
+    []
+  );
 
-  const handleAnswer = (
-    answer: number | string | { [key: string]: string }
-  ) => {
-    setSelectedAnswer(answer);
-  };
-
-  const handleCheckboxAnswer = (answerIndex: number) => {
-    setSelectedCheckboxAnswers((prev: number[]) =>
+  const handleCheckboxAnswer = useCallback((answerIndex: number) => {
+    setSelectedCheckboxAnswers((prev) =>
       prev.includes(answerIndex)
         ? prev.filter((index) => index !== answerIndex)
         : [...prev, answerIndex]
     );
-  };
+  }, []);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(() => {
     const currentQuiz = shuffledQuizData[currentQuestion];
 
     if (
       currentQuiz.type === "radio" &&
       selectedAnswer === currentQuiz.correctAnswer
     ) {
-      setScore(score + 1);
+      setScore((prev) => prev + 1);
     } else if (
       currentQuiz.type === "checkbox" &&
       JSON.stringify(selectedCheckboxAnswers.sort()) ===
         JSON.stringify((currentQuiz.correctAnswers as number[]).sort())
     ) {
-      setScore(score + 1);
+      setScore((prev) => prev + 1);
     } else if (
       currentQuiz.type === "input" &&
       inputAnswer.trim().toLowerCase() ===
         (currentQuiz.correctAnswer as string).toLowerCase()
     ) {
-      setScore(score + 1);
+      setScore((prev) => prev + 1);
     } else if (
       currentQuiz.type === "match" &&
       JSON.stringify(selectedAnswer) ===
         JSON.stringify(currentQuiz.correctAnswers)
     ) {
-      setScore(score + 1);
+      setScore((prev) => prev + 1);
     }
 
     if (currentQuestion < shuffledQuizData.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      setCurrentQuestion((prev) => prev + 1);
       setSelectedAnswer(null);
       setSelectedCheckboxAnswers([]);
       setInputAnswer("");
     } else {
       setQuizCompleted(true);
     }
-  };
+  }, [
+    currentQuestion,
+    shuffledQuizData,
+    selectedAnswer,
+    selectedCheckboxAnswers,
+    inputAnswer,
+  ]);
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 max-w-2xl flex items-center min-h-[80vh] justify-center">
-        <Card className="w-full bg-slate-800 border-slate-700">
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center text-slate-200">
+            <CardTitle className="text-2xl font-bold text-center">
               Quiz Santé Mentale
             </CardTitle>
           </CardHeader>
@@ -162,10 +175,10 @@ export default function Quiz() {
                   }
                   className="mb-4"
                 />
-                <h2 className="text-xl font-semibold mb-4 text-slate-200">
+                <h2 className="text-xl font-semibold mb-4">
                   Question {currentQuestion + 1}
                 </h2>
-                <p className="mb-4 text-slate-300">
+                <p className="mb-4">
                   {shuffledQuizData[currentQuestion].question}
                 </p>
                 {shuffledQuizData[currentQuestion].type === "radio" && (
@@ -184,12 +197,7 @@ export default function Quiz() {
                           value={index.toString()}
                           id={`option-${index}`}
                         />
-                        <Label
-                          htmlFor={`option-${index}`}
-                          className="text-slate-300"
-                        >
-                          {option}
-                        </Label>
+                        <Label htmlFor={`option-${index}`}>{option}</Label>
                       </div>
                     ))}
                   </RadioGroup>
@@ -203,30 +211,23 @@ export default function Quiz() {
                         key={index}
                         className="flex items-center space-x-2 mb-2"
                       >
-                        <input
-                          type="checkbox"
+                        <Checkbox
                           id={`checkbox-${index}`}
                           checked={selectedCheckboxAnswers.includes(index)}
-                          onChange={() => handleCheckboxAnswer(index)}
-                          className="form-checkbox"
+                          onCheckedChange={() => handleCheckboxAnswer(index)}
                         />
-                        <Label
-                          htmlFor={`checkbox-${index}`}
-                          className="text-slate-300"
-                        >
-                          {option}
-                        </Label>
+                        <Label htmlFor={`checkbox-${index}`}>{option}</Label>
                       </div>
                     ))}
                   </div>
                 )}
                 {shuffledQuizData[currentQuestion].type === "input" && (
                   <div className="mb-4">
-                    <input
+                    <Input
                       type="text"
                       value={inputAnswer}
                       onChange={(e) => setInputAnswer(e.target.value)}
-                      className="form-input w-full"
+                      placeholder="Votre réponse"
                     />
                   </div>
                 )}
@@ -241,38 +242,35 @@ export default function Quiz() {
                         key={index}
                         className="flex items-center space-x-2 mb-2"
                       >
-                        <Label
-                          htmlFor={`match-${index}`}
-                          className="text-slate-300"
-                        >
-                          {key}
-                        </Label>
-                        <select
-                          id={`match-${index}`}
+                        <Label htmlFor={`match-${index}`}>{key}</Label>
+                        <Select
                           value={
                             (selectedAnswer as { [key: string]: string })?.[
                               key
                             ] || ""
                           }
-                          onChange={(e) =>
+                          onValueChange={(value) =>
                             setSelectedAnswer({
                               ...(selectedAnswer as { [key: string]: string }),
-                              [key]: e.target.value,
+                              [key]: value,
                             })
                           }
-                          className="form-select"
                         >
-                          <option value="">Select</option>
-                          {Object.values(
-                            shuffledQuizData[currentQuestion].options as {
-                              [key: string]: string;
-                            }
-                          ).map((value, i) => (
-                            <option key={i} value={value}>
-                              {value}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Sélectionnez" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.values(
+                              shuffledQuizData[currentQuestion].options as {
+                                [key: string]: string;
+                              }
+                            ).map((value, i) => (
+                              <SelectItem key={i} value={value}>
+                                {value}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                     ))}
                   </div>
@@ -280,13 +278,11 @@ export default function Quiz() {
               </>
             ) : (
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4 text-slate-200">
-                  Quiz Terminé !
-                </h2>
-                <p className="text-xl mb-4 text-slate-300">
+                <h2 className="text-2xl font-bold mb-4">Quiz Terminé !</h2>
+                <p className="text-xl mb-4">
                   Votre score : {score} sur {shuffledQuizData.length}
                 </p>
-                <p className="text-slate-300">
+                <p>
                   Excellent travail ! Vous avez gagné 50 XP pour avoir terminé
                   ce quiz.
                 </p>

@@ -18,7 +18,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 type MessageType = {
-  id: number;
+  id: string;
   sender: string;
   content: string;
   timestamp: string;
@@ -30,7 +30,7 @@ type MessageType = {
 
 const initialMessages: MessageType[] = [
   {
-    id: 1,
+    id: "1",
     sender: "Alice Astronaute",
     content: "Salut ! Comment ça va aujourd'hui ?",
     timestamp: "14:30",
@@ -38,7 +38,7 @@ const initialMessages: MessageType[] = [
     isSeen: false,
   },
   {
-    id: 2,
+    id: "2",
     sender: "Moi",
     content: "Ça va bien, merci ! J'ai fait une séance de méditation ce matin.",
     timestamp: "14:32",
@@ -46,7 +46,7 @@ const initialMessages: MessageType[] = [
     isMine: true,
   },
   {
-    id: 3,
+    id: "3",
     sender: "Alice Astronaute",
     content: "C'est génial ! Ça t'a aidé à te sentir plus calme ?",
     timestamp: "14:35",
@@ -54,7 +54,7 @@ const initialMessages: MessageType[] = [
     isMine: false,
   },
   {
-    id: 4,
+    id: "4",
     sender: "Moi",
     content:
       "Oui, vraiment ! Je me sens plus serein pour affronter la journée.",
@@ -63,7 +63,7 @@ const initialMessages: MessageType[] = [
     isMine: true,
   },
   {
-    id: 5,
+    id: "5",
     sender: "Alice Astronaute",
     content:
       "Je suis contente pour toi ! N'hésite pas si tu as besoin de parler.",
@@ -90,7 +90,7 @@ export default function Chat(props: ChatPropsType) {
     e.preventDefault();
     if (newMessage.trim()) {
       const newMsg: MessageType = {
-        id: messages.length + 1,
+        id: messages.length + "ad",
         sender: "Moi",
         content: newMessage,
         timestamp: new Date().toLocaleTimeString([], {
@@ -114,7 +114,7 @@ export default function Chat(props: ChatPropsType) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const newFileMessage: MessageType = {
-        id: messages.length + 1,
+        id: messages.length + "af",
         sender: "Moi",
         content: file.name,
         fileUrl: URL.createObjectURL(file),

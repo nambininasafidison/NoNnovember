@@ -7,41 +7,45 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Heart, MessageCircle, Star } from "lucide-react";
 import { useState } from "react";
 
-// Define types for each category of search result
-type User = {
+interface User {
   id: number;
   name: string;
   username: string;
   avatar: string;
   bio: string;
-};
+}
 
-type Post = {
+interface Post {
   id: number;
   author: string;
   content: string;
   likes: number;
   comments: number;
-};
+}
 
-type Event = {
+interface Event {
   id: number;
   title: string;
   date: string;
   participants: number;
-};
+}
 
-type Resource = {
+interface Resource {
   id: number;
   title: string;
   type: string;
   rating: number;
-};
+}
 
-type SearchResult = User | Post | Event | Resource;
+interface SearchResults {
+  users: User[];
+  posts: Post[];
+  events: Event[];
+  resources: Resource[];
+}
 
 // Example search data
-const searchResults = {
+const searchResults: SearchResults = {
   users: [
     {
       id: 1,
@@ -106,13 +110,14 @@ const searchResults = {
   ],
 };
 
+type SearchCategory = keyof SearchResults;
+type SearchResult = User | Post | Event | Resource;
+
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState<SearchCategory | "all">("all");
 
-  const filterResults = (
-    category: keyof typeof searchResults
-  ): SearchResult[] => {
+  const filterResults = (category: SearchCategory) => {
     return searchResults[category].filter((item) =>
       Object.values(item).some(
         (value) =>
@@ -129,15 +134,102 @@ export default function Search() {
     ...filterResults("resources"),
   ];
 
-  // Type guards to differentiate between types
-  const isUser = (result: SearchResult): result is User => "username" in result;
-  const isPost = (result: SearchResult): result is Post => "author" in result;
-  const isEvent = (result: SearchResult): result is Event => "date" in result;
-  const isResource = (result: SearchResult): result is Resource =>
-    "type" in result;
+  const renderResultCard = (result: SearchResult) => {
+    if ("username" in result) {
+      return (
+        <Card key={result.id} className="mb-4 bg-slate-800 border-slate-700">
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-4 mb-2">
+              <Avatar>
+                <AvatarImage src={result.avatar} alt={result.name} />
+                <AvatarFallback>{result.name.slice(0, 2)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-200">
+                  {result.name}
+                </h3>
+                <p className="text-sm text-slate-400">{result.username}</p>
+              </div>
+            </div>
+            <p className="text-slate-300">{result.bio}</p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" size="sm">
+              Voir le profil
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    } else if ("content" in result) {
+      return (
+        <Card key={result.id} className="mb-4 bg-slate-800 border-slate-700">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold text-slate-200 mb-2">
+              {result.author}
+            </h3>
+            <p className="text-slate-300 mb-2">{result.content}</p>
+            <div className="flex space-x-4 text-slate-400">
+              <span className="flex items-center">
+                <Heart className="w-4 h-4 mr-1" />
+                {result.likes}
+              </span>
+              <span className="flex items-center">
+                <MessageCircle className="w-4 h-4 mr-1" />
+                {result.comments}
+              </span>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" size="sm">
+              Voir le post
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    } else if ("date" in result) {
+      return (
+        <Card key={result.id} className="mb-4 bg-slate-800 border-slate-700">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold text-slate-200">
+              {result.title}
+            </h3>
+            <p className="text-sm text-slate-400">Date: {result.date}</p>
+            <p className="text-sm text-slate-400">
+              Participants: {result.participants}
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" size="sm">
+              Plus d&apos;infos
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    } else {
+      return (
+        <Card key={result.id} className="mb-4 bg-slate-800 border-slate-700">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold text-slate-200">
+              {result.title}
+            </h3>
+            <p className="text-sm text-slate-400">Type: {result.type}</p>
+            <div className="flex items-center mt-2">
+              <Star className="w-4 h-4 text-yellow-500 mr-1" />
+              <span className="text-slate-300">{result.rating}</span>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" size="sm">
+              Accéder à la ressource
+            </Button>
+          </CardFooter>
+        </Card>
+      );
+    }
+  };
 
   return (
-    <div className="container mx-auto px-4 pt-24 pb-8">
+    <div className="container mx-auto px-4 py-8 pt-24">
       <div
         className={`fixed top-0 right-0 bg-popover border-border backdrop-blur-lg border-b z-40 w-full flex items-center pr-5`}
       >
@@ -153,9 +245,12 @@ export default function Search() {
           className="p-2 bg-none border-none text-xl py-5"
         />
       </div>
-      <h1 className="text-3xl font-bold mb-8 text-slate-200">Résultas</h1>
+      <h1 className="text-3xl font-bold mb-8 text-slate-200">Resultat</h1>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as SearchCategory | "all")}
+      >
         <TabsList className="bg-slate-800 border-slate-700">
           <TabsTrigger value="all">Tout</TabsTrigger>
           <TabsTrigger value="users">Utilisateurs</TabsTrigger>
@@ -166,195 +261,33 @@ export default function Search() {
 
         <TabsContent value="all">
           <ScrollArea className="h-[75vh] -mr-3 pr-3">
-            {allResults.map((result, index) => (
-              <Card key={index} className="mb-4 bg-slate-800 border-slate-700">
-                <CardContent className="pt-6">
-                  {isUser(result) && (
-                    <div className="flex items-center space-x-4 mb-2">
-                      <Avatar>
-                        <AvatarImage src={result.avatar} alt={result.name} />
-                        <AvatarFallback>
-                          {result.name.slice(0, 2)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-200">
-                          {result.name}
-                        </h3>
-                        <p className="text-sm text-slate-400">
-                          {result.username}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  {isPost(result) && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200 mb-2">
-                        {result.author}
-                      </h3>
-                      <p className="text-slate-300 mb-2">{result.content}</p>
-                      <div className="flex space-x-4 text-slate-400">
-                        <span className="flex items-center">
-                          <Heart className="w-4 h-4 mr-1" />
-                          {result.likes}
-                        </span>
-                        <span className="flex items-center">
-                          <MessageCircle className="w-4 h-4 mr-1" />
-                          {result.comments}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {isEvent(result) && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200">
-                        {result.title}
-                      </h3>
-                      <p className="text-sm text-slate-400">
-                        Date: {result.date}
-                      </p>
-                      <p className="text-sm text-slate-400">
-                        Participants: {result.participants}
-                      </p>
-                    </div>
-                  )}
-                  {isResource(result) && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200">
-                        {result.title}
-                      </h3>
-                      <p className="text-sm text-slate-400">
-                        Type: {result.type}
-                      </p>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-500 mr-1" />
-                        <span className="text-slate-300">{result.rating}</span>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+            {allResults.map((result) => renderResultCard(result))}
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="users">
           <ScrollArea className="h-[75vh] -mr-3 pr-3">
-            {filterResults("users").map((user) => (
-              <Card
-                key={user.id}
-                className="mb-4 bg-slate-800 border-slate-700"
-              >
-                <CardContent className="pt-6">
-                  <div className="flex items-center space-x-4">
-                    <Avatar>
-                      <AvatarImage src={user.avatar} alt={user.name} />
-                      <AvatarFallback>{user.name.slice(0, 2)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-200">
-                        {user.name}
-                      </h3>
-                      <p className="text-sm text-slate-400">{user.username}</p>
-                    </div>
-                  </div>
-                  <p className="mt-2 text-slate-300">{user.bio}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm">
-                    Voir le profil
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {filterResults("users").map((user) => renderResultCard(user))}
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="posts">
           <ScrollArea className="h-[75vh] -mr-3 pr-3">
-            {filterResults("posts").map((post) => (
-              <Card
-                key={post.id}
-                className="mb-4 bg-slate-800 border-slate-700"
-              >
-                <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-slate-200 mb-2">
-                    {post.author}
-                  </h3>
-                  <p className="text-slate-300 mb-2">{post.content}</p>
-                  <div className="flex space-x-4 text-slate-400">
-                    <span className="flex items-center">
-                      <Heart className="w-4 h-4 mr-1" />
-                      {post.likes}
-                    </span>
-                    <span className="flex items-center">
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      {post.comments}
-                    </span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm">
-                    Voir le post
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {filterResults("posts").map((post) => renderResultCard(post))}
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="events">
           <ScrollArea className="h-[75vh] -mr-3 pr-3">
-            {filterResults("events").map((event) => (
-              <Card
-                key={event.id}
-                className="mb-4 bg-slate-800 border-slate-700"
-              >
-                <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-slate-200">
-                    {event.title}
-                  </h3>
-                  <p className="text-sm text-slate-400">Date: {event.date}</p>
-                  <p className="text-sm text-slate-400">
-                    Participants: {event.participants}
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm">
-                    Plus d&apos;infos
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {filterResults("events").map((event) => renderResultCard(event))}
           </ScrollArea>
         </TabsContent>
 
         <TabsContent value="resources">
           <ScrollArea className="h-[75vh] -mr-3 pr-3">
-            {filterResults("resources").map((resource) => (
-              <Card
-                key={resource.id}
-                className="mb-4 bg-slate-800 border-slate-700"
-              >
-                <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-slate-200">
-                    {resource.title}
-                  </h3>
-                  <p className="text-sm text-slate-400">
-                    Type: {resource.type}
-                  </p>
-                  <div className="flex items-center mt-2">
-                    <Star className="w-4 h-4 text-yellow-500 mr-1" />
-                    <span className="text-slate-300">{resource.rating}</span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm">
-                    Accéder à la ressource
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+            {filterResults("resources").map((resource) =>
+              renderResultCard(resource)
+            )}
           </ScrollArea>
         </TabsContent>
       </Tabs>

@@ -8,7 +8,7 @@ import { Search } from "lucide-react";
 
 const conversations = [
   {
-    id: 1,
+    id: "1",
     name: "Alice Astronaute",
     avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Comment s'est passée ta journée ?",
@@ -17,7 +17,7 @@ const conversations = [
     isGroup: false,
   },
   {
-    id: 2,
+    id: "2",
     name: "Bob Blackhole",
     avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "J'ai trouvé un nouvel exercice de méditation !",
@@ -26,7 +26,7 @@ const conversations = [
     isGroup: false,
   },
   {
-    id: 3,
+    id: "3",
     name: "Charlie Cosmos",
     avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "On se voit pour la séance de groupe demain ?",
@@ -35,7 +35,7 @@ const conversations = [
     isGroup: false,
   },
   {
-    id: 4,
+    id: "4",
     name: "Diana Dimension",
     avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Merci pour ton soutien !",
@@ -44,7 +44,7 @@ const conversations = [
     isGroup: false,
   },
   {
-    id: 5,
+    id: "5",
     name: "Kiala Team",
     avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Merci pour Votre soutien !",
