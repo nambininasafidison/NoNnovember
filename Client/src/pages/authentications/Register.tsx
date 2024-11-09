@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { API } from "@/utils/serverConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Rocket } from "lucide-react";
 import { ChangeEvent, useState } from "react";
@@ -56,9 +57,7 @@ export default function Login() {
     setErrorMessage(null);
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_SERVER_URL}:${
-        import.meta.env.VITE_SERVER_PORT
-      }/${import.meta.env.VITE_SIGNUP_API}`;
+      const url = `${API}/${import.meta.env.VITE_SIGNUP_API}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
