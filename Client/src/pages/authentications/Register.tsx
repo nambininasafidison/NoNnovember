@@ -1,18 +1,13 @@
+import loginPic from "@/assets/16218.jpg";
+import astro from "@/assets/Astro_gen.svg";
 import { AlertDialogDemo } from "@/components/AlertDialogDemo";
 import JustAlert from "@/components/JustAlert";
 import Loader from "@/components/Loader";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API } from "@/utils/serverConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Rocket } from "lucide-react";
+import { Home, Rocket } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -91,15 +86,23 @@ export default function Login() {
   };
 
   return (
-    <div className="container px-4 py-8 flex items-center justify-center w-screen min-h-screen bg-background">
-      <Card className="w-full max-w-md bg-slate-800 border-slate-700">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-slate-200">
-            <Rocket className="w-6 h-6 inline-block mr-2" />
-            Inscription
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="w-screen min-h-screen bg-primary flex">
+      <div className="w-7/12 h-screen flex flex-col items-center justify-start">
+        <div className="container p-36 py-20 relative">
+          <div className="flex items-center justify-start gap-5 w-full mb-16">
+            <div className="aspect-video h-14 w-14">
+              <img src={astro} alt="astrogen" className="object-cover" />
+            </div>
+            <h1 className="text-5xl">Astrogen</h1>
+          </div>
+          <h1 className="text-6xl">S'incrire</h1>
+          <p className="text-xl text-slate-400 mb-16">
+            Avoir une compte ?{" "}
+            <Link to="/login" className="text-blue-400 hover:underline">
+              Se connecter
+            </Link>
+            <Rocket className="w-6 h-6 inline-block ml-2" />
+          </p>
           <FormProvider {...methods}>
             <form
               action=""
@@ -107,18 +110,15 @@ export default function Login() {
               onSubmit={(e) => {
                 e.preventDefault();
               }}
-              className="w-full space-y-6 mt-16"
+              className="w-full space-y-10 mt-16"
             >
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-200">
-                  Votre nom
-                </Label>
                 <Input
                   id="name"
                   type="name"
-                  placeholder="Astronaute Bill"
+                  placeholder="Votre nom"
                   {...register("name")}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
                 {errors.name && (
@@ -126,15 +126,12 @@ export default function Login() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-200">
-                  Adresse e-mail
-                </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="astronaute@espace.com"
+                  placeholder="Adresse e-mail"
                   {...register("email")}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
                 {errors.email && (
@@ -142,14 +139,13 @@ export default function Login() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-200">
-                  Mot de passe
-                </Label>
+                <Label htmlFor="password" className="text-slate-200"></Label>
                 <Input
                   id="password"
                   type="password"
+                  placeholder="Mot de passe"
                   {...register("password")}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
                 {errors.password && (
@@ -157,46 +153,44 @@ export default function Login() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="newPassword" className="text-slate-200">
-                  Retaper le mot de passe
-                </Label>
                 <Input
                   id="newPassword"
                   type="password"
                   value={newPassword}
+                  placeholder="Retaper le mot de passe"
                   onChange={(e) => handleChange(e)}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
+                {!isMatch && newPassword.length >= 8 && (
+                  <p className="text-red-500">
+                    Les mots de passe ne sont pas égale
+                  </p>
+                )}
               </div>
-              {!isMatch && newPassword.length >= 8 && (
-                <p className="text-red-500">
-                  Les mots de passe ne sont pas égale
-                </p>
-              )}
-              <AlertDialogDemo
-                label="S'inscrire"
-                title="Etes vous sur de s'inscrire ?"
-                className="text-md p-6 gap-4 mt-32 w-full"
-                alertStatus={async () => {
-                  handleSubmit(onSubmit)();
-                }}
-              />
+              <div className="w-full flex mt-32 gap-4 items-center">
+                <AlertDialogDemo
+                  label="Connexion"
+                  title="Etes vous sur de se connecter ?"
+                  className="text-lg p-6 gap-4  w-full bg-secondary text-background hover:bg-popover"
+                  alertStatus={async () => {
+                    handleSubmit(onSubmit)();
+                  }}
+                />
+                <Link to="/" className="text-secondary w-fit">
+                  <Home className="h-9 w-9" />
+                </Link>
+              </div>
             </form>
           </FormProvider>
-        </CardContent>
-        <CardFooter className="flex flex-col items-center justify-center gap-3">
-          <p className="text-sm text-slate-400">
-            Deja a une compte ?{" "}
-            <Link to="/login" className="text-blue-400 hover:underline">
-              Se connecter
-            </Link>
-          </p>
-          <Link to="/" className="text-secondary">
-            Accueil
-          </Link>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
+
+      <div className="w-5/12 h-screen p-5 lg:order-last order-first">
+        <div className="aspect-video h-full w-full rounded-xl overflow-hidden">
+          <img src={loginPic} alt="astrogen" className="object-cover h-full" />
+        </div>
+      </div>
       {serverResponse && (
         <JustAlert
           title={serverResponse}

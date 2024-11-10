@@ -1,19 +1,14 @@
+import loginPic from "@/assets/16218.jpg";
+import astro from "@/assets/Astro_gen.svg";
 import { AlertDialogDemo } from "@/components/AlertDialogDemo";
 import JustAlert from "@/components/JustAlert";
 import Loader from "@/components/Loader";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthProvider";
 import { API } from "@/utils/serverConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Rocket } from "lucide-react";
+import { Home, Rocket } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -85,15 +80,28 @@ export default function Login() {
   };
 
   return (
-    <div className="container px-4 py-8 flex items-center justify-center w-screen min-h-screen bg-background">
-      <Card className="w-full max-w-md bg-slate-800 border-slate-700">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-slate-200">
-            <Rocket className="w-6 h-6 inline-block mr-2" />
-            Connexion à Votre Voyage Spatial
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="w-screen min-h-screen bg-primary flex">
+      <div className="w-7/12 h-screen flex flex-col items-center justify-start">
+        <div className="container p-36 py-28 relative">
+          <div className="flex items-center justify-start gap-5 w-full mb-24">
+            <div className="aspect-video h-14 w-14">
+              <img src={astro} alt="astrogen" className="object-cover" />
+            </div>
+            <h1 className="text-5xl">Astrogen</h1>
+          </div>
+          <h1 className="text-6xl">Se connecter</h1>
+          <p className="text-xl text-slate-400 mb-16">
+            Pas encore de compte ?{" "}
+            <Link to="/register" className="text-blue-400 hover:underline">
+              S&apos;inscrire
+            </Link>
+            <Rocket className="w-6 h-6 inline-block ml-2" />
+          </p>
+          <div className="flex gap-8 text-nowrap items-center w-full mb-24">
+            <hr className="border-2 border-foreground w-full" />
+            <p className="text-lg uppercase">Se connecter par mail</p>
+            <hr className="border-2 bg-foreground w-full" />
+          </div>
           <FormProvider {...methods}>
             <form
               action=""
@@ -101,18 +109,15 @@ export default function Login() {
               onSubmit={(e) => {
                 e.preventDefault();
               }}
-              className="w-full space-y-6 mt-16"
+              className="w-full space-y-10 mt-16"
             >
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-200">
-                  Adresse e-mail
-                </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="astronaute@espace.com"
+                  placeholder="Adresse e-mail"
                   {...register("email")}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
                 {errors.email && (
@@ -120,43 +125,43 @@ export default function Login() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-200">
-                  Mot de passe
-                </Label>
+                <Label htmlFor="password" className="text-slate-200"></Label>
                 <Input
                   id="password"
                   type="password"
+                  placeholder="Mot de passe"
                   {...register("password")}
-                  className="bg-slate-700 border-slate-600 text-slate-200"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
                   required
                 />
                 {errors.password && (
                   <p className="text-red-500">{errors.password.message}</p>
                 )}
               </div>
-              <AlertDialogDemo
-                label="Connexion"
-                title="Etes vous sur de se connecter ?"
-                className="text-md p-6 gap-4 mt-32 w-full"
-                alertStatus={async () => {
-                  handleSubmit(onSubmit)();
-                }}
-              />
+              <div className="w-full flex mt-32 gap-4 items-center">
+                <AlertDialogDemo
+                  label="Connexion"
+                  title="Etes vous sur de se connecter ?"
+                  className="text-lg p-6 gap-4  w-full bg-secondary text-background hover:bg-popover"
+                  alertStatus={async () => {
+                    handleSubmit(onSubmit)();
+                  }}
+                />
+                <Link to="/" className="text-secondary w-fit">
+                  <Home className="h-9 w-9" />
+                </Link>
+              </div>
             </form>
           </FormProvider>
-        </CardContent>
-        <CardFooter className="flex flex-col items-center justify-center gap-3">
-          <p className="text-sm text-slate-400">
-            Pas encore de compte ?{" "}
-            <Link to="/register" className="text-blue-400 hover:underline">
-              S&apos;inscrire
-            </Link>
-          </p>
-          <Link to="/" className="text-secondary">
-            Accueil
-          </Link>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
+
+      <div className="w-5/12 h-screen p-5 lg:order-last order-first">
+        <div className="aspect-video h-full w-full rounded-xl overflow-hidden">
+          <img src={loginPic} alt="astrogen" className="object-cover h-full" />
+        </div>
+      </div>
+
       {serverResponse && (
         <JustAlert
           title={serverResponse}

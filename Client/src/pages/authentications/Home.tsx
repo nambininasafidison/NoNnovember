@@ -44,7 +44,11 @@ export default function Home() {
             <Button variant="outline" asChild>
               <Link to="/login">Connexion</Link>
             </Button>
-            <Button asChild>
+            <Button
+              variant={"secondary"}
+              asChild
+              className="hover:bg-foreground"
+            >
               <Link to="/register">Inscription</Link>
             </Button>
           </motion.div>
@@ -119,7 +123,7 @@ export default function Home() {
                       >
                         <Card>
                           <CardContent className="pt-6 bg-primary rounded-lg">
-                            <feature.icon className="w-12 h-12 mb-4 text-blue-500" />
+                            <feature.icon className="w-12 min-h-24 mb-4 text-blue-500" />
                             <h3 className="text-lg font-semibold mb-2">
                               {feature.title}
                             </h3>
