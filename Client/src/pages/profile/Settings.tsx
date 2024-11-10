@@ -1,4 +1,7 @@
+import { AlertDialogDemo } from "@/components/AlertDialogDemo";
 import AvatarPicker from "@/components/AvatarPicker";
+import JustAlert from "@/components/JustAlert";
+import Loader from "@/components/Loader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,10 +25,26 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/contexts/AuthProvider";
 import Layout from "@/layouts/Layout";
 import { avatars } from "@/utils/avatars";
+import { API } from "@/utils/serverConfig";
+import { UserProfileType } from "@/utils/Type";
+import { useFetch } from "@/utils/useFetch";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const schema = z.object({
+  gender: z.string().optional(),
+  bio: z.string().optional(),
+  avatar: z.string().optional(),
+  occupation: z.string().optional(),
+  location: z.string().optional(),
+});
+type FormData = z.infer<typeof schema>;
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -34,11 +53,78 @@ export default function Settings() {
     undefined
   );
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [serverResponse, setServerResponse] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isServerOpen, setIsServerOpen] = useState<boolean>(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+  const { id } = useAuth();
 
+  const {
+    data: userProfile,
+    error: profileError,
+    isLoading: isProfileLoading,
+  } = useFetch<UserProfileType>(API + "/users/user_infos/" + id!);
+  console.log(userProfile);
+
+  const methods = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      gender: "",
+      bio: "",
+      avatar: "",
+      occupation: "",
+      location: "",
+    },
+  });
+
+  const { register, reset, handleSubmit } = methods;
+
+  const onSubmit = async (data: FormData) => {
+    setServerResponse(null);
+    setErrorMessage(null);
+    setIsLoading(true);
+    console.log(data);
+
+    try {
+      const url = `${API}/users/update/${id}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'authentification");
+      }
+      const responseData = await response.json();
+      reset();
+      setServerResponse(responseData.message || "Authentification réussie");
+      setIsServerOpen(true);
+      if (!responseData.message && !isServerOpen) {
+        window.location.href = "/";
+      }
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Une erreur inconnue est survenue"
+      );
+      setIsErrorOpen(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleAvatarSelect = (avatar: string) => {
     setSelectedAvatar(avatar);
+    methods.setValue("avatar", avatar);
     console.log("Avatar sélectionné:", avatar);
   };
+
+  if (isProfileLoading) return <Loader />;
+  if (profileError) {
+    console.log(profileError);
+    return <div>Erreur lors du chargement des données</div>;
+  }
 
   return (
     <Layout>
@@ -68,7 +154,12 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage src={selectedAvatar} alt="Avatar" />
+                    <AvatarImage
+                      src={
+                        selectedAvatar ? selectedAvatar : userProfile?.avatar
+                      }
+                      alt="Avatar"
+                    />
                     <AvatarFallback>UN</AvatarFallback>
                   </Avatar>
                   <Button
@@ -88,25 +179,44 @@ export default function Settings() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="username" className="text-slate-200">
-                    Nom d&apos;utilisateur
+                  <Label htmlFor="occupation" className="text-slate-200">
+                    Occupation{" "}
                   </Label>
                   <Input
-                    id="username"
-                    defaultValue="AstronauteNova"
+                    id="occupation"
+                    defaultValue={userProfile?.occupation}
+                    {...register("occupation")}
                     className="bg-slate-700 border-slate-600 text-slate-200"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-200">
-                    Email
+                  <Label htmlFor="location" className="text-slate-200">
+                    Location
                   </Label>
                   <Input
-                    id="email"
-                    type="email"
-                    defaultValue="astronaute@espace.com"
+                    id="location"
+                    type="text"
+                    defaultValue={userProfile?.location}
+                    {...register("location")}
                     className="bg-slate-700 border-slate-600 text-slate-200"
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gender" className="text-slate-200">
+                    Genre
+                  </Label>
+                  <Select
+                    {...register("gender")}
+                    defaultValue={userProfile?.gender}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Sélectionnez votre genre" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="masculin">Masculin</SelectItem>
+                      <SelectItem value="feminin">Féminin</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="bio" className="text-slate-200">
@@ -114,13 +224,21 @@ export default function Settings() {
                   </Label>
                   <Textarea
                     id="bio"
-                    defaultValue="Explorateur de l'espace intérieur et extérieur"
+                    {...register("bio")}
+                    defaultValue={userProfile?.bio}
                     className="bg-slate-700 border-slate-600 text-slate-200"
                   />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Sauvegarder les Modifications</Button>
+                <AlertDialogDemo
+                  label="Sauvegarder les Modifications"
+                  title="Etes vous sur de se connecter ?"
+                  className="text-lg p-6 gap-4  w-full bg-secondary text-background hover:bg-popover"
+                  alertStatus={async () => {
+                    handleSubmit(onSubmit)();
+                  }}
+                />
               </CardFooter>
             </Card>
           </TabsContent>
@@ -311,6 +429,23 @@ export default function Settings() {
           </TabsContent>
         </Tabs>
       </div>
+      {serverResponse && (
+        <JustAlert
+          title={serverResponse}
+          isOpen={isServerOpen}
+          variant="default"
+          onClose={() => setIsServerOpen(false)}
+        />
+      )}
+      {errorMessage && (
+        <JustAlert
+          title={errorMessage}
+          isOpen={isErrorOpen}
+          variant="destructive"
+          onClose={() => setIsErrorOpen(false)}
+        />
+      )}
+      {isLoading && <Loader />}
     </Layout>
   );
 }

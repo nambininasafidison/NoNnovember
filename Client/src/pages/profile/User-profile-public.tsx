@@ -1,5 +1,5 @@
-import p3 from "@/assets/72177.jpg";
 import AsHeader from "@/components/AsHeader";
+import Loader from "@/components/Loader";
 import Post from "@/components/sections/feed/Post";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { API } from "@/utils/serverConfig";
 import { PhotoType, PostPropsType, UserProfileType } from "@/utils/Type";
+import { useFetch } from "@/utils/useFetch";
 import {
   Briefcase,
   Calendar,
@@ -22,99 +24,58 @@ import {
   UserPlus,
 } from "lucide-react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import UserPhotoGallery from "./User-photo-gallery";
 
-const userProfile: UserProfileType = {
-  userId: "a",
-  name: "Stella Nova",
-  email: "stellanova@example.com",
-  gender: "Female",
-  userAccountType: "Mentor",
-  avatar: "/placeholder.svg?height=128&width=128",
-  bio: "Exploratrice de l'espace intérieur et extérieur. Passionnée de santé mentale et d'astronomie. 🚀🌟",
-  location: "Station Spatiale Internationale",
-  occupation: "Psychologue Spatiale",
-  joinDate: "Membre depuis Mars 2023",
-  friends: [],
-  postsNumber: 42,
-};
-
-const userPosts: PostPropsType[] = [
-  {
-    postId: "kdfjdjf",
-    author: {
-      authorId: "sdsap53465qd",
-      authorName: "Astronaute Anonyme",
-      avatar: "",
-    },
-    body: "Aujourd'hui, j'ai médité en observant la Terre depuis la coupole. C'est incroyable comme ça met les choses en perspective ! 🌍✨ #MeditationSpatiale",
-    likes: [""],
-    timestamp: "Il y a 2 heures",
-    supporters: [""],
-    files: [p3],
-    commentsNumber: 6,
-  },
-  {
-    postId: "ewrer",
-    author: {
-      authorId: "sdspllapqd",
-      authorName: "Astronaute Anonyme",
-      avatar: "",
-    },
-    body: "Petit rappel : prenez soin de votre santé mentale comme vous prendriez soin d'une plante dans l'espace. Nourrissez-la, donnez-lui de la lumière, et soyez patient. 🌱🧠 #SantéMentale",
-    likes: [""],
-    timestamp: "Il y a 1 jour",
-    supporters: [""],
-    files: [p3],
-    commentsNumber: 3,
-  },
-  {
-    postId: "asdad",
-    author: {
-      authorId: "sds1223apqd",
-      authorName: "Astronaute Anonyme",
-      avatar: "",
-    },
-    body: "Question du jour : quelle est votre technique préférée pour gérer le stress ? Partagez dans les commentaires ! 🤔💭 #GestionDuStress",
-    likes: [""],
-    timestamp: "Il y a 3 jours",
-    supporters: [""],
-    files: [p3],
-    commentsNumber: 4,
-  },
-];
-
-const userPhotos: PhotoType[] = [];
-userPosts.map((post) => {
-  post.files?.forEach((file) =>
-    userPhotos.push({
-      id: post.postId,
-      src: file,
-      alt: post.body,
-      likes: post.likes,
-      comments: post.commentsNumber,
-      body: post.body,
-    })
-  );
-});
-
 export default function UserProfilePublic() {
+  const { id } = useParams();
+  const {
+    data: userProfile,
+    error: profileError,
+    isLoading: isProfileLoading,
+  } = useFetch<UserProfileType>(API + "/users/user_infos/" + id!);
+
+  const {
+    data: userPosts,
+    error: postsError,
+    isLoading: isPostsLoading,
+  } = useFetch<PostPropsType[]>(API + "/posts/user_posts/" + id!);
+  console.log(userProfile, userPosts, profileError, postsError);
+
+  const userPhotos: PhotoType[] = [];
+  userPosts!.map((post) => {
+    post.files?.forEach((file) =>
+      userPhotos.push({
+        id: post.postId,
+        src: file,
+        alt: post.body,
+        likes: post.likes,
+        comments: post.commentsNumber,
+        body: post.body,
+      })
+    );
+  });
+
   const [activeTab, setActiveTab] = useState("posts");
   const [posts, setPosts] = useState(userPosts);
 
   const handleChangeLikes = (value: string[], postId: string) => {
-    const updatedposts = posts.map((post) =>
+    const updatedposts = posts!.map((post) =>
       post.postId === postId ? { ...post, likes: value } : post
     );
     setPosts([...updatedposts]);
   };
 
   const handleChangeSupporters = (value: string[], postId: string) => {
-    const updatedPosts = posts.map((post) =>
+    const updatedPosts = posts!.map((post) =>
       post.postId === postId ? { ...post, supporters: value } : post
     );
     setPosts([...updatedPosts]);
   };
+
+  if (isPostsLoading || isProfileLoading) return <Loader />;
+  if (postsError || profileError)
+    return <div>Erreur lors du chargement des données</div>;
 
   return (
     <div className="container mx-auto px-4 py-8 pt-24">
@@ -123,29 +84,29 @@ export default function UserProfilePublic() {
         <CardHeader>
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
             <Avatar className="w-24 h-24">
-              <AvatarImage src={userProfile.avatar} alt={userProfile.name} />
-              <AvatarFallback>{userProfile.name.slice(0, 2)}</AvatarFallback>
+              <AvatarImage src={userProfile!.avatar} alt={userProfile!.name} />
+              <AvatarFallback>{userProfile!.name.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="text-center md:text-left">
               <CardTitle className="text-2xl font-bold text-slate-200">
-                {userProfile.name}
+                {userProfile!.name}
               </CardTitle>
               <CardDescription className="text-slate-400">
-                {userProfile.name}
+                {userProfile!.name}
               </CardDescription>
-              <p className="mt-2 text-slate-300">{userProfile.bio}</p>
+              <p className="mt-2 text-slate-300">{userProfile!.bio}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
                 <Badge variant="secondary">
                   <MapPin className="w-3 h-3 mr-1" />
-                  {userProfile.location}
+                  {userProfile!.location}
                 </Badge>
                 <Badge variant="secondary">
                   <Briefcase className="w-3 h-3 mr-1" />
-                  {userProfile.occupation}
+                  {userProfile!.occupation}
                 </Badge>
                 <Badge variant="secondary">
                   <Calendar className="w-3 h-3 mr-1" />
-                  {userProfile.joinDate}
+                  {userProfile!.joinDate}
                 </Badge>
               </div>
             </div>
@@ -164,10 +125,10 @@ export default function UserProfilePublic() {
           </div>
           <div className="flex justify-center md:justify-start space-x-4 text-slate-300">
             <span>
-              <strong>{userProfile.friends.length}</strong> amis
+              <strong>{userProfile!.friends.length}</strong> amis
             </span>
             <span>
-              <strong>{userProfile.postsNumber}</strong> publications
+              <strong>{userProfile!.postsNumber}</strong> publications
             </span>
           </div>
         </CardContent>
@@ -182,7 +143,7 @@ export default function UserProfilePublic() {
 
         <TabsContent value="posts">
           <div className="py-5 space-y-6">
-            {posts.map((item, index) => (
+            {posts!.map((item, index) => (
               <Post
                 key={index}
                 post={item}
@@ -198,7 +159,7 @@ export default function UserProfilePublic() {
         </TabsContent>
 
         <TabsContent value="photos">
-          <UserPhotoGallery photos={userPhotos} />
+          <UserPhotoGallery photos={userPhotos!} />
         </TabsContent>
 
         <TabsContent value="about">
@@ -211,22 +172,22 @@ export default function UserProfilePublic() {
             <CardContent className="space-y-4">
               <div>
                 <h3 className="font-semibold text-slate-200">Bio</h3>
-                <p className="text-slate-300">{userProfile.bio}</p>
+                <p className="text-slate-300">{userProfile!.bio}</p>
               </div>
               <Separator />
               <div>
                 <h3 className="font-semibold text-slate-200">Localisation</h3>
-                <p className="text-slate-300">{userProfile.location}</p>
+                <p className="text-slate-300">{userProfile!.location}</p>
               </div>
               <Separator />
               <div>
                 <h3 className="font-semibold text-slate-200">Profession</h3>
-                <p className="text-slate-300">{userProfile.occupation}</p>
+                <p className="text-slate-300">{userProfile!.occupation}</p>
               </div>
               <Separator />
               <div>
                 <h3 className="font-semibold text-slate-200">Membre depuis</h3>
-                <p className="text-slate-300">{userProfile.joinDate}</p>
+                <p className="text-slate-300">{userProfile!.joinDate}</p>
               </div>
             </CardContent>
           </Card>

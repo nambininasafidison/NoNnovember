@@ -82,7 +82,7 @@ export default function Login() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
-    if (newPassword === methods.getValues("password")) setIsMacth(true);
+    setIsMacth(e.target.value === methods.getValues("password"));
   };
 
   return (
@@ -162,9 +162,9 @@ export default function Login() {
                   className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground lg:text-xl text-md outline-none py-7"
                   required
                 />
-                {!isMatch && newPassword.length >= 8 && (
+                {!isMatch && (
                   <p className="text-red-500">
-                    Les mots de passe ne sont pas égale
+                    Les mots de passe ne sont pas concordants
                   </p>
                 )}
               </div>
