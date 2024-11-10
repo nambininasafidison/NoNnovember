@@ -52,7 +52,7 @@ export default function Home() {
             <Button variant="outline" asChild>
               <Link to="/login">
                 <LogIn />
-                <span className="md:block hidden">Connexion</span>
+                <span className="md:block hidden ml-2">Connexion</span>
               </Link>
             </Button>
             <Button
@@ -62,7 +62,7 @@ export default function Home() {
             >
               <Link to="/register">
                 <UserPlus />
-                <span className="md:block hidden">Inscription</span>
+                <span className="md:block hidden ml-2">Inscription</span>
               </Link>
             </Button>
           </motion.div>
