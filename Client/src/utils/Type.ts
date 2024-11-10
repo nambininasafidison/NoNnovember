@@ -60,11 +60,21 @@ export type NoticePropsType = {
   };
 };
 
-export type ConversationType = {
-  id: string;
+export type conversationMessagesType = {
+  sender_id: string;
+  content: string;
+};
+
+export type conversationUserstType = {
+  user_id: string;
   name: string;
   avatar: string;
-  isGroup: boolean;
+};
+
+export type ConversationType = {
+  conversation_id: string;
+  messages: conversationMessagesType[];
+  users: conversationUserstType[];
 };
 
 export type ChatPropsType = {

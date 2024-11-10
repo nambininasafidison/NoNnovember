@@ -7,10 +7,20 @@ import { useState } from "react";
 export default function Discussions() {
   const [selectedConversation, setSelectedConversation] =
     useState<ConversationType>({
-      id: "",
-      name: "",
-      avatar: "",
-      isGroup: false,
+      conversation_id: "",
+      messages: [
+        {
+          sender_id: "",
+          content: "",
+        },
+      ],
+      users: [
+        {
+          user_id: "",
+          name: "",
+          avatar: "",
+        },
+      ],
     });
   const [isChatOpen, setIsChatOpen] = useState(false);
 

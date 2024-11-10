@@ -1,56 +1,105 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DiscussionPropsType } from "@/utils/Type";
+import { ConversationType, DiscussionPropsType } from "@/utils/Type";
 import { Search } from "lucide-react";
 
-const conversations = [
+const conversations: ConversationType[] = [
   {
-    id: "1",
-    name: "Alice Astronaute",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Comment s'est passée ta journée ?",
-    timestamp: "14:30",
-    unread: 2,
-    isGroup: false,
+    conversation_id: "1",
+    messages: [
+      {
+        sender_id: "1",
+        content: "Comment s'est passée ta journée ?",
+      },
+    ],
+    users: [
+      {
+        user_id: "1",
+        name: "Alice Astronaute",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        user_id: "2",
+        name: "Alice Astroe",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        user_id: "3",
+        name: "GHe Astronaute",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+      {
+        user_id: "4",
+        name: "Alice Astronaute",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+    ],
   },
   {
-    id: "2",
-    name: "Bob Blackhole",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "J'ai trouvé un nouvel exercice de méditation !",
-    timestamp: "Hier",
-    unread: 0,
-    isGroup: false,
+    conversation_id: "2",
+    messages: [
+      {
+        sender_id: "2",
+        content: "J'ai trouvé un nouvel exercice de méditation !",
+      },
+    ],
+    users: [
+      {
+        user_id: "2",
+        name: "Bob Blackhole",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+    ],
   },
   {
-    id: "3",
-    name: "Charlie Cosmos",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "On se voit pour la séance de groupe demain ?",
-    timestamp: "Lun",
-    unread: 1,
-    isGroup: false,
+    conversation_id: "3",
+    messages: [
+      {
+        sender_id: "3",
+        content: "On se voit pour la séance de groupe demain ?",
+      },
+    ],
+    users: [
+      {
+        user_id: "3",
+        name: "Charlie Cosmos",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+    ],
   },
   {
-    id: "4",
-    name: "Diana Dimension",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Merci pour ton soutien !",
-    timestamp: "07/11",
-    unread: 0,
-    isGroup: false,
+    conversation_id: "4",
+    messages: [
+      {
+        sender_id: "4",
+        content: "Merci pour ton soutien !",
+      },
+    ],
+    users: [
+      {
+        user_id: "4",
+        name: "Diana Dimension",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+    ],
   },
   {
-    id: "5",
-    name: "Kiala Team",
-    avatar: "/placeholder.svg?height=40&width=40",
-    lastMessage: "Merci pour Votre soutien !",
-    timestamp: "07/11",
-    unread: 0,
-    isGroup: true,
+    conversation_id: "5",
+    messages: [
+      {
+        sender_id: "5",
+        content: "Merci pour Votre soutien !",
+      },
+    ],
+    users: [
+      {
+        user_id: "5",
+        name: "Kiala Team",
+        avatar: "/placeholder.svg?height=40&width=40",
+      },
+    ],
   },
 ];
 
@@ -67,37 +116,48 @@ export default function Discussion(props: DiscussionPropsType) {
           />
         </div>
         <ScrollArea className="md:h-[calc(92vh-300px)] h-[calc(92vh-210px)] md:w-full w-[calc(100vw-20px)] px-1">
-          {conversations.map((conversation) => (
-            <div
-              key={conversation.id}
-              className={`flex items-center space-x-4 p-3 rounded-lg cursor-pointer transition-colors ${
-                props.selectedConversation.id === conversation.id
-                  ? "bg-slate-700"
-                  : "hover:bg-slate-700"
-              }`}
-              onClick={() => {
-                props.onChangeSelected(conversation);
-                props.onChangeOpen(true);
-              }}
-            >
-              <Avatar>
-                <AvatarImage
-                  src={conversation.avatar}
-                  alt={conversation.name}
-                />
-                <AvatarFallback>{conversation.name.slice(0, 2)}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium text-slate-200 truncate">
-                    {conversation.name}
+          {conversations.map((conversation) => {
+            const avatar = (() => {
+              const sender = conversation.users.find(
+                (user) => conversation.messages[0].sender_id === user.user_id
+              );
+              return sender ? sender.avatar : "/default-avatar.svg";
+            })();
+            const name = (() => {
+              const sender = conversation.users.find(
+                (user) => conversation.messages[0].sender_id === user.user_id
+              );
+              return sender ? sender.name : "Anonyme";
+            })();
+            return (
+              <div
+                key={conversation.conversation_id}
+                className={`flex items-center space-x-4 p-3 rounded-lg cursor-pointer transition-colors ${
+                  props.selectedConversation.conversation_id ===
+                  conversation.conversation_id
+                    ? "bg-slate-700"
+                    : "hover:bg-slate-700"
+                }`}
+                onClick={() => {
+                  props.onChangeSelected(conversation);
+                  props.onChangeOpen(true);
+                }}
+              >
+                <Avatar>
+                  <AvatarImage src={avatar} alt={name} />
+                  <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-medium text-slate-200 truncate">
+                      {name}
+                    </p>
+                  </div>
+                  <p className="text-sm text-slate-400 truncate">
+                    {conversation.messages[0].content}
                   </p>
                 </div>
-                <p className="text-sm text-slate-400 truncate">
-                  {conversation.lastMessage}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
+                {/* <div className="flex items-center gap-2">
                 {conversation.unread > 0 && (
                   <Badge variant="destructive" className="rounded-full">
                     {conversation.unread}
@@ -106,9 +166,10 @@ export default function Discussion(props: DiscussionPropsType) {
                 <span className="text-xs text-slate-400">
                   {conversation.timestamp}
                 </span>
+              </div> */}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </ScrollArea>
       </CardContent>
     </Card>

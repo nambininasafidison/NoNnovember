@@ -86,17 +86,17 @@ export default function Login() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-primary flex">
-      <div className="w-7/12 h-screen flex flex-col items-center justify-start">
-        <div className="container p-36 py-20 relative">
-          <div className="flex items-center justify-start gap-5 w-full mb-16">
+    <div className="w-screen min-h-screen bg-primary flex lg:flex-row flex-col">
+      <div className="lg:w-7/12 w-full h-screen flex flex-col items-center justify-start">
+        <div className="container lg:p-36 lg:py-28 p-10 relative">
+          <div className="flex items-center justify-start gap-5 w-full lg:mb-24 mb-6">
             <div className="aspect-video h-14 w-14">
               <img src={astro} alt="astrogen" className="object-cover" />
             </div>
-            <h1 className="text-5xl">Astrogen</h1>
+            <h1 className="lg:text-5xl text-3xl">Astrogen</h1>
           </div>
-          <h1 className="text-6xl">S'incrire</h1>
-          <p className="text-xl text-slate-400 mb-16">
+          <h1 className="lg:text-6xl text-4xl">S'incrire</h1>
+          <p className="lg:text-xl text-md text-slate-400 mb-9">
             Avoir une compte ?{" "}
             <Link to="/login" className="text-blue-400 hover:underline">
               Se connecter
@@ -110,7 +110,7 @@ export default function Login() {
               onSubmit={(e) => {
                 e.preventDefault();
               }}
-              className="w-full space-y-10 mt-16"
+              className="w-full space-y-4 mt-16"
             >
               <div className="space-y-2">
                 <Input
@@ -118,7 +118,7 @@ export default function Login() {
                   type="name"
                   placeholder="Votre nom"
                   {...register("name")}
-                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground lg:text-xl text-md outline-none py-7"
                   required
                 />
                 {errors.name && (
@@ -131,7 +131,7 @@ export default function Login() {
                   type="email"
                   placeholder="Adresse e-mail"
                   {...register("email")}
-                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground lg:text-xl text-md outline-none py-7"
                   required
                 />
                 {errors.email && (
@@ -145,7 +145,7 @@ export default function Login() {
                   type="password"
                   placeholder="Mot de passe"
                   {...register("password")}
-                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground lg:text-xl text-md outline-none py-7"
                   required
                 />
                 {errors.password && (
@@ -159,7 +159,7 @@ export default function Login() {
                   value={newPassword}
                   placeholder="Retaper le mot de passe"
                   onChange={(e) => handleChange(e)}
-                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground text-xl outline-none py-7"
+                  className="bg-none border-0 border-b-4 border-foreground rounded-none text-foreground placeholder:text-foreground lg:text-xl text-md outline-none py-7"
                   required
                 />
                 {!isMatch && newPassword.length >= 8 && (
@@ -186,7 +186,7 @@ export default function Login() {
         </div>
       </div>
 
-      <div className="w-5/12 h-screen p-5 lg:order-last order-first">
+      <div className="w-5/12 h-screen lg:block hidden p-5 lg:order-last order-first">
         <div className="aspect-video h-full w-full rounded-xl overflow-hidden">
           <img src={loginPic} alt="astrogen" className="object-cover h-full" />
         </div>

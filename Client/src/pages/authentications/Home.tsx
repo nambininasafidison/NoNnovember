@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
-import { Calendar, Gamepad, Heart, Star, Users } from "lucide-react";
+import {
+  Calendar,
+  Gamepad,
+  Heart,
+  LogIn,
+  Star,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,7 +28,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-100 pb-12">
       <header className="container mx-auto px-4 py-5">
         <nav className="flex justify-between items-center">
           <motion.div
@@ -32,24 +40,30 @@ export default function Home() {
               <div className="aspect-video h-20 w-20">
                 <img src={astro} alt="astrogen" className="object-cover" />
               </div>
-              <h1 className="text-3xl font-bold">Astrogen</h1>
+              <h1 className="md:text-3xl text-xl font-bold">Astrogen</h1>
             </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="space-x-4"
+            className="flex gap-1 items-center justify-center"
           >
             <Button variant="outline" asChild>
-              <Link to="/login">Connexion</Link>
+              <Link to="/login">
+                <LogIn />
+                <span className="md:block hidden">Connexion</span>
+              </Link>
             </Button>
             <Button
               variant={"secondary"}
               asChild
               className="hover:bg-foreground"
             >
-              <Link to="/register">Inscription</Link>
+              <Link to="/register">
+                <UserPlus />
+                <span className="md:block hidden">Inscription</span>
+              </Link>
             </Button>
           </motion.div>
         </nav>
@@ -80,7 +94,7 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <Tabs defaultValue="features" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
+            <TabsList className="mb-8 h-full grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-lg md:w-fit w-full">
               <TabsTrigger value="features">Fonctionnalités</TabsTrigger>
               <TabsTrigger value="community">Communauté</TabsTrigger>
               <TabsTrigger value="events">Événements</TabsTrigger>

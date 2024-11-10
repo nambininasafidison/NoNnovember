@@ -2,9 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/contexts/AuthProvider";
 import { ChatPropsType } from "@/utils/Type";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import {
@@ -18,11 +18,12 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 type MessageType = {
-  id: string;
-  sender: string;
+  sender: {
+    name: string;
+    avatar: string;
+  };
   content: string;
   timestamp: string;
-  isMine: boolean;
   isSeen: boolean;
   isFile?: boolean;
   fileUrl?: string;
@@ -30,46 +31,51 @@ type MessageType = {
 
 const initialMessages: MessageType[] = [
   {
-    id: "1",
-    sender: "Alice Astronaute",
+    sender: {
+      name: "Alice Astronaute",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
     content: "Salut ! Comment ça va aujourd'hui ?",
     timestamp: "14:30",
-    isMine: false,
     isSeen: false,
   },
   {
-    id: "2",
-    sender: "Moi",
+    sender: {
+      name: "Moi",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
     content: "Ça va bien, merci ! J'ai fait une séance de méditation ce matin.",
     timestamp: "14:32",
     isSeen: false,
-    isMine: true,
   },
   {
-    id: "3",
-    sender: "Alice Astronaute",
+    sender: {
+      name: "Alice Astronaute",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
     content: "C'est génial ! Ça t'a aidé à te sentir plus calme ?",
     timestamp: "14:35",
     isSeen: false,
-    isMine: false,
   },
   {
-    id: "4",
-    sender: "Moi",
+    sender: {
+      name: "Moi",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
     content:
       "Oui, vraiment ! Je me sens plus serein pour affronter la journée.",
     timestamp: "14:37",
     isSeen: false,
-    isMine: true,
   },
   {
-    id: "5",
-    sender: "Alice Astronaute",
+    sender: {
+      name: "Alice Astronaute",
+      avatar: "/placeholder.svg?height=40&width=40",
+    },
     content:
       "Je suis contente pour toi ! N'hésite pas si tu as besoin de parler.",
     timestamp: "14:40",
     isSeen: false,
-    isMine: false,
   },
 ];
 
@@ -78,11 +84,18 @@ export default function Chat(props: ChatPropsType) {
   const [newMessage, setNewMessage] = useState("");
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const { id, name } = useAuth();
+
+  const avatar = (() => {
+    const sender = props.selectedConversation.users.find(
+      (user) => id === user.user_id
+    );
+    return sender ? sender.avatar : "/default";
+  })();
 
   useEffect(() => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-      // lastMessageRef.current.scrollTop = lastMessageRef.current?.scrollHeight;
     }
   }, [messages]);
 
@@ -90,17 +103,18 @@ export default function Chat(props: ChatPropsType) {
     e.preventDefault();
     if (newMessage.trim()) {
       const newMsg: MessageType = {
-        id: messages.length + "ad",
-        sender: "Moi",
+        sender: {
+          name: name!,
+          avatar,
+        },
         content: newMessage,
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        isMine: true,
         isSeen: false,
       };
-      setMessages([...messages, newMsg]);
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
       setNewMessage("");
     }
   };
@@ -114,65 +128,74 @@ export default function Chat(props: ChatPropsType) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const newFileMessage: MessageType = {
-        id: messages.length + "af",
-        sender: "Moi",
+        sender: {
+          name: name!,
+          avatar,
+        },
         content: file.name,
         fileUrl: URL.createObjectURL(file),
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        isMine: true,
         isFile: true,
         isSeen: false,
       };
-      setMessages([...messages, newFileMessage]);
+      setMessages((prevMessages) => [...prevMessages, newFileMessage]);
     }
   };
 
   return (
-    <Card className="md:bg-slate-800 border-slate-700 md:col-span-2 md:border border-none  bg-background md:ml-0 -ml-6 md:mb-0 -mb6">
+    <Card className="md:bg-slate-800 border-slate-700 md:col-span-2 md:border border-none bg-background md:ml-0 -ml-6 md:mb-0 -mb6">
       <CardHeader className="py-2">
         <div className="flex items-center space-x-4">
           <ArrowLeft
             onClick={props.onChangeOpen}
             className="w-10 h-10 cursor-pointer"
           />
-          <Avatar>
-            <AvatarImage
-              src={props.selectedConversation.avatar}
-              alt={props.selectedConversation.name}
-            />
-            <AvatarFallback>
-              {props.selectedConversation.name.slice(0, 2)}
-            </AvatarFallback>
-          </Avatar>
-          <CardTitle className="text-slate-200">
-            {props.selectedConversation.name}
-          </CardTitle>
+          {props.selectedConversation.users &&
+            props.selectedConversation.users.map((user, index) =>
+              user.user_id !== id && index < 6 ? (
+                <Avatar
+                  key={user.user_id}
+                  className={`-ml-${index * 10} z-[${index * 10}] `}
+                >
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback>{user.name.slice(0, 2)}</AvatarFallback>
+                </Avatar>
+              ) : null
+            )}
+          {props.selectedConversation.users &&
+            props.selectedConversation.users.map((user, index) =>
+              user.user_id !== id && index < 6 ? (
+                <CardTitle key={user.user_id} className="text-slate-200">
+                  {user.name} ,
+                </CardTitle>
+              ) : null
+            )}
         </div>
       </CardHeader>
       <CardContent>
         <ScrollArea className="md:h-[calc(100vh-400px)] h-[calc(92vh-260px)] md:mb-4 md:pr-4 md:w-full w-[calc(100vw-15px)]">
           {messages.map((message, index) => {
-            message.isSeen = message.isMine ? false : true;
+            message.isSeen = message.sender.name !== name! ? false : true;
             return (
-              <>
-                <p className="px-1">
-                  {props.selectedConversation.isGroup &&
-                    !message.isMine &&
-                    message.sender}
-                </p>
+              <div
+                key={message.timestamp}
+                ref={index === messages.length - 1 ? lastMessageRef : null}
+              >
+                {props.selectedConversation.users.length > 2 &&
+                  message.sender.name !== name! && (
+                    <p className="px-1">{message.sender.name}</p>
+                  )}
                 <div
-                  key={message.id}
-                  ref={index === messages.length - 1 ? lastMessageRef : null}
                   className={`flex flex-col mb-4 ${
-                    message.isMine ? "items-end" : "items-start"
+                    message.sender.name === name! ? "items-end" : "items-start"
                   }`}
                 >
                   <div
                     className={`max-w-[70%] p-3 rounded-lg ${
-                      message.isMine
+                      message.sender.name === name!
                         ? "bg-blue-600 text-white"
                         : "bg-slate-700 text-slate-200"
                     }`}
@@ -191,23 +214,23 @@ export default function Chat(props: ChatPropsType) {
                     )}
                   </div>
                   <div className="flex">
-                    {message.isMine && message.isSeen ? (
+                    {message.sender.name === name! && message.isSeen ? (
                       <CheckCheck className="w-5 h-5" />
-                    ) : message.isMine && !message.isSeen ? (
+                    ) : message.sender.name === name! && !message.isSeen ? (
                       <Check className="w-5 h-5" />
                     ) : (
                       ""
                     )}
                     <span
                       className={`text-xs opacity-70 mt-1 block px-1 ${
-                        message.isMine && "text-end"
+                        message.sender.name === name! && "text-end"
                       }`}
                     >
                       {message.timestamp}
                     </span>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
         </ScrollArea>
@@ -230,30 +253,27 @@ export default function Chat(props: ChatPropsType) {
             onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}
           >
             <Smile className="h-4 w-4" />
-            <span className="sr-only">Ajouter un emoji</span>
           </Button>
-          <Label
-            htmlFor="file"
-            className="bg-background border border-accent cursor-pointer p-2.5 rounded-md"
-          >
-            <Paperclip className="h-4 w-4" />
-          </Label>
+          <Button type="submit" disabled={!newMessage.trim()}>
+            <Send className="w-5 h-5" />
+          </Button>
           <input
             type="file"
-            id="file"
+            id="file-upload"
             className="hidden"
             onChange={handleFileUpload}
+            accept="image/*, .pdf, .txt, .docx"
           />
-          <Button variant={"outline"} type="submit" size="icon">
-            <Send className="h-4 w-4" />
-            <span className="sr-only">Envoyer</span>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() => document.getElementById("file-upload")?.click()}
+          >
+            <Paperclip className="w-4 h-4" />
           </Button>
-          {isEmojiPickerOpen && (
-            <div className="absolute bottom-14 right-2">
-              <EmojiPicker onEmojiClick={handleEmojiClick} />
-            </div>
-          )}
         </form>
+        {isEmojiPickerOpen && <EmojiPicker onEmojiClick={handleEmojiClick} />}
       </CardContent>
     </Card>
   );

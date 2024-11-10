@@ -47,7 +47,7 @@ export default function PersonalSpace() {
         </div>
 
         <Tabs defaultValue="tableau-de-bord">
-          <TabsList className="mb-8 h-full grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-lg w-full">
+          <TabsList className="mb-8 h-full grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-lg md:w-fit w-full">
             <TabsTrigger value="tableau-de-bord">
               <Star className="w-4 h-4 md:hidden" /> Tableau de Bord
             </TabsTrigger>
