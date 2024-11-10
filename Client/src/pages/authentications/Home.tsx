@@ -49,7 +49,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="flex gap-1 items-center justify-center"
           >
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="text-primary">
               <Link to="/login">
                 <LogIn />
                 <span className="md:block hidden ml-2">Connexion</span>
