@@ -52,7 +52,7 @@ export default function Login() {
     setErrorMessage(null);
     setIsLoading(true);
     try {
-      const url = `${API}/${import.meta.env.VITE_SIGNUP_API}`;
+      const url = `${API}/auth/signup`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

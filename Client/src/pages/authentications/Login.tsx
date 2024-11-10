@@ -50,7 +50,7 @@ export default function Login() {
     setErrorMessage(null);
     setIsLoading(true);
     try {
-      const url = `${API}/${import.meta.env.VITE_SIGNIN_API}`;
+      const url = `${API}/auth/login`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
