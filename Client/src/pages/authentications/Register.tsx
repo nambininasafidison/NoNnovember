@@ -3,6 +3,7 @@ import astro from "@/assets/Astro_gen.svg";
 import { AlertDialogDemo } from "@/components/AlertDialogDemo";
 import JustAlert from "@/components/JustAlert";
 import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API } from "@/utils/serverConfig";
@@ -24,7 +25,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function Login() {
   const [newPassword, setNewPassword] = useState("");
-  const [isMatch, setIsMacth] = useState(false);
+  const [isMatch, setIsMacth] = useState(true);
   const [serverResponse, setServerResponse] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -169,14 +170,20 @@ export default function Login() {
                 )}
               </div>
               <div className="w-full flex mt-32 gap-4 items-center">
-                <AlertDialogDemo
-                  label="Connexion"
-                  title="Etes vous sur de se connecter ?"
-                  className="text-lg p-6 gap-4  w-full bg-secondary text-background hover:bg-popover"
-                  alertStatus={async () => {
-                    handleSubmit(onSubmit)();
-                  }}
-                />
+                {isMatch ? (
+                  <AlertDialogDemo
+                    label="S'inscrire"
+                    title="Etes vous sur de s'inscrire ?"
+                    className="text-lg p-6 gap-4  w-full bg-secondary text-background hover:bg-popover"
+                    alertStatus={async () => {
+                      handleSubmit(onSubmit)();
+                    }}
+                  />
+                ) : (
+                  <Button className="text-lg p-6 gap-4  w-full bg-popover text-background hover:bg-destructive">
+                    S'inscrire
+                  </Button>
+                )}
                 <Link to="/" className="text-secondary w-fit">
                   <Home className="h-9 w-9" />
                 </Link>
