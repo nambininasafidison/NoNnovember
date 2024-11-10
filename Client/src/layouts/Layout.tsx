@@ -28,7 +28,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`min-h-screen bg-background`}>
       {/* Left Sidebar */}
-      <div className={`fixed left-0 top-0 h-full w-16 bg-card border-r z-50`}>
+      <div
+        className={`fixed left-0 top-0 h-full w-16 bg-card border-r z-50 md:block hidden`}
+      >
         <div className="flex flex-col items-center gap-4 p-4">
           <Link to="/">
             <Button variant="ghost" size="icon" className="text-foreground">
@@ -80,9 +82,62 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
+      <div
+        className={`fixed left-0 bottom-0 w-full h-16 bg-card border-r z-50 block md:hidden`}
+      >
+        <div className="flex justify-evenly items-center gap-4 p-4">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="text-foreground">
+              <Home className="h-6 w-6" />
+            </Button>
+          </Link>
+          <Link to="/notification">
+            <Button variant="ghost" size="icon" className="text-foreground">
+              <Bell className="h-6 w-6" />
+            </Button>
+          </Link>
+          <Link to="/discussions">
+            <Button variant="ghost" size="icon" className="text-foreground">
+              <MessageCircle className="h-6 w-6" />
+            </Button>
+          </Link>
+          <Link to="/quiz">
+            <Button variant="ghost" size="icon" className="text-foreground">
+              <ClipboardList className="h-6 w-6" />
+            </Button>
+          </Link>
+          <Link
+            to={"/profilePublic/" + id}
+            className="relative rounded-full border-2 border-primary"
+          >
+            <Avatar className="h-8 w-8 text-foreground">
+              <AvatarImage
+                src="/placeholder.svg?height=40&width=40"
+                alt="@astronaut"
+              />
+              <AvatarFallback>AS</AvatarFallback>
+            </Avatar>
+          </Link>
+        </div>
+      </div>
+
+      <div
+        className={`fixed top-0 left-0 w-full h-14 px-3 bg-popover border-border backdrop-blur-lg border-b z-40 md:hidden flex justify-between items-center`}
+      >
+        <p className="text-2xl">Astrogen</p>
+        <div className="flex items-center justify-between p-4 gap-3">
+          <Link to="/search">
+            <Search className="h-7 w-7 font-bold" />
+          </Link>
+          <Link to="/menu">
+            <Menu className="h-7 w-7 font-bold" />
+          </Link>
+        </div>
+      </div>
+
       {/* Top Navigation */}
       <div
-        className={`fixed top-0 left-16 right-0 bg-popover border-border backdrop-blur-lg border-b z-40`}
+        className={`fixed top-0 left-16 right-0 bg-popover border-border backdrop-blur-lg border-b z-40 md:block hidden`}
       >
         <div className="flex items-center justify-between p-4">
           <div className="flex-1 max-w-xl">
@@ -140,8 +195,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Main Content */}
-      <div className="pt-20 pl-16">
-        <div className="container mx-auto p-4">{children}</div>
+      <div className="md:pt-20 md:pl-16 py-10">
+        <div className="md:container md:mx-auto md:p-4">{children}</div>
       </div>
 
       {/* Notification Toast */}

@@ -48,7 +48,7 @@ export default function Settings() {
         </h1>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-4">
+          <TabsList className="mb-4 h-full grid grid-cols-2 md:flex md:space-x-4 gap-2 rounded-lg w-full">
             <TabsTrigger value="profile">Profil</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="privacy">Confidentialité</TabsTrigger>

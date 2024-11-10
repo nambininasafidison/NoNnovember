@@ -125,13 +125,13 @@ export default function FriendRequests() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-2 md:flex-row flex-col w-min">
                         <Button
                           size="sm"
                           onClick={() => handleAccept(request.id)}
                         >
                           <Check className="w-4 h-4 mr-2" />
-                          Accepter
+                          <span className="md:block hidden">Accepter</span>
                         </Button>
                         <Button
                           size="sm"
@@ -139,7 +139,7 @@ export default function FriendRequests() {
                           onClick={() => handleReject(request.id)}
                         >
                           <X className="w-4 h-4 mr-2" />
-                          Refuser
+                          <span className="md:block hidden">Refuser</span>
                         </Button>
                       </div>
                     </div>
@@ -190,7 +190,7 @@ export default function FriendRequests() {
                         onClick={() => handleSendRequest(suggestion.id)}
                       >
                         <UserPlus className="w-4 h-4 mr-2" />
-                        Ajouter
+                        <span className="md:block hidden">Ajouter</span>
                       </Button>
                     </div>
                   ))}

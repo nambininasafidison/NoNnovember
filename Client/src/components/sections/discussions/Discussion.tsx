@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DiscussionPropsType } from "@/utils/Type";
@@ -56,10 +56,7 @@ const conversations = [
 
 export default function Discussion(props: DiscussionPropsType) {
   return (
-    <Card className="bg-slate-800 border-slate-700 md:col-span-1">
-      <CardHeader>
-        <CardTitle className="text-slate-200">Conversations</CardTitle>
-      </CardHeader>
+    <Card className="md:col-span-1 md:border border-none md:bg-slate-700 bg-background md:ml-0 md:pt-5 -ml-6">
       <CardContent>
         <div className="relative mb-4">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-slate-400" />
@@ -69,7 +66,7 @@ export default function Discussion(props: DiscussionPropsType) {
             className="pl-10 bg-slate-700 border-slate-600 text-slate-200"
           />
         </div>
-        <ScrollArea className="h-[calc(100vh-300px)]">
+        <ScrollArea className="md:h-[calc(92vh-300px)] h-[calc(92vh-210px)] md:w-full w-[calc(100vw-20px)] px-1">
           {conversations.map((conversation) => (
             <div
               key={conversation.id}

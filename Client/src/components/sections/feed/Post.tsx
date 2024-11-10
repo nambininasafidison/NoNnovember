@@ -93,7 +93,7 @@ export default function Post(props: {
           <p className="text-slate-200">{props.post.body} 💫</p>
         </Link>
       </CardContent>
-      <CardFooter className="flex gap-4 border-t border-slate-700 py-3">
+      <CardFooter className="flex md:gap-4 gap-2 border-t border-slate-700 py-3">
         <div className="flex items-center">
           <Heart
             onClick={() => handleLikeToggle(props.post)}
@@ -101,7 +101,10 @@ export default function Post(props: {
               props.post.likes.includes(id!) ? "text-red-500" : ""
             }`}
           />
-          <p>{props.post.likes.length} J'adore</p>
+          <p>
+            {props.post.likes.length}{" "}
+            <span className="md:block hidden">J'adore</span>
+          </p>
         </div>
         <Link to={"/individualPost/" + props.post.postId}>
           <Button variant="ghost" className="text-slate-200">
@@ -116,7 +119,10 @@ export default function Post(props: {
               props.post.supporters.includes(id!) ? "text-red-900" : ""
             }`}
           />
-          <p>{props.post.supporters.length} Soutenir</p>
+          <p>
+            {props.post.supporters.length}{" "}
+            <span className="md:block hidden">Soutenir</span>
+          </p>
         </div>
         <Button variant="ghost" className="text-slate-200 ml-auto">
           <Share2 className="w-6 h-6" />

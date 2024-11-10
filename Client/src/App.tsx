@@ -34,7 +34,7 @@ export default function App() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        {!status ? (
+        {status ? (
           <>
             <Route path="/" element={<Feed />} />
             <Route path="/notification" element={<Notifications />} />

@@ -6,15 +6,22 @@ import { useState } from "react";
 
 export default function Discussions() {
   const [selectedConversation, setSelectedConversation] =
-    useState<ConversationType>({ id: "", name: "", avatar: "", isGroup: false });
+    useState<ConversationType>({
+      id: "",
+      name: "",
+      avatar: "",
+      isGroup: false,
+    });
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-foreground">Discussions</h1>
+      <div className="md:container md:mx-auto md:px-4 md:py-8 p-2">
+        <h1 className="text-3xl font-bold md:mb-8 text-foreground">
+          Discussions
+        </h1>
 
-        <div className="grid grid-cols-1 gap-6 w-full">
+        <div className="grid grid-cols-1 md:gap-6 w-full">
           {isChatOpen ? (
             <Chat
               selectedConversation={selectedConversation}

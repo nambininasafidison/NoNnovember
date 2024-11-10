@@ -15,7 +15,9 @@ export default function Notice(props: NoticePropsType) {
         <div className="flex justify-between items-center w-full">
           <div>
             <p className="text-foreground">{props.content} 💫</p>
-            <div className="text-sm text-slate-400">{props.timestamp}</div>
+            <div className="text-sm text-slate-400 text-end">
+              {props.timestamp}
+            </div>
           </div>
         </div>
       </div>

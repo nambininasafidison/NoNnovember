@@ -131,8 +131,8 @@ export default function Chat(props: ChatPropsType) {
   };
 
   return (
-    <Card className="bg-slate-800 border-slate-700 md:col-span-2">
-      <CardHeader>
+    <Card className="md:bg-slate-800 border-slate-700 md:col-span-2 md:border border-none  bg-background md:ml-0 -ml-6 md:mb-0 -mb6">
+      <CardHeader className="py-2">
         <div className="flex items-center space-x-4">
           <ArrowLeft
             onClick={props.onChangeOpen}
@@ -153,7 +153,7 @@ export default function Chat(props: ChatPropsType) {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[calc(100vh-400px)] mb-4 -mr-4 pr-4">
+        <ScrollArea className="md:h-[calc(100vh-400px)] h-[calc(92vh-260px)] md:mb-4 md:pr-4 md:w-full w-[calc(100vw-15px)]">
           {messages.map((message, index) => {
             message.isSeen = message.isMine ? false : true;
             return (
@@ -211,10 +211,10 @@ export default function Chat(props: ChatPropsType) {
             );
           })}
         </ScrollArea>
-        <Separator className="my-4" />
+        <Separator className="md:my-4 my-1 md:w-full w-[calc(100vw-15px)]" />
         <form
           onSubmit={handleSendMessage}
-          className="flex items-center space-x-2 relative"
+          className="flex items-end space-x-2 relative md:w-full w-[calc(100vw-15px)]"
         >
           <Input
             type="text"

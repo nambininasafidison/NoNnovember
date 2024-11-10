@@ -14,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthProvider";
 import Layout from "@/layouts/Layout";
 import {
+  Brain,
+  FileText,
   HelpCircle,
   HelpingHand,
   Search,
@@ -145,6 +147,20 @@ export default function Menu() {
             </div>
           </Link>
           <Separator className="my-5" />
+          <Link to="/quiz">
+            <div className="flex gap-4 w-fit text-xl items-center">
+              <Brain className="h-12 w-12" />
+              Take Quiz
+            </div>
+          </Link>
+          <Separator className="my-5" />
+          <Link to="/createPost">
+            <div className="flex gap-4 w-fit text-xl items-center">
+              <FileText className="h-12 w-12" />
+              Create Post
+            </div>
+          </Link>
+          <Separator className="my-5" />
           <Link to={"/settings"}>
             <div className="flex gap-4 w-fit text-xl items-center">
               <Settings className="h-12 w-12" />
@@ -155,7 +171,7 @@ export default function Menu() {
           <AlertDialogDemo
             label="Se déconnecter"
             title="Êtes-vous sûr de vouloir vous déconnecter ?"
-            className="text-xl text-background bg-foreground hover:text-secondary, hover:bg-secondary-foreground p-6 px-8"
+            className="text-xl text-background bg-foreground hover:text-secondary, hover:bg-secondary-foreground p-6 px-8 md:w-fit w-full"
             alertStatus={() => {
               clearTokens();
             }}

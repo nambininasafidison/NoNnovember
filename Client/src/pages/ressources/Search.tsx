@@ -242,7 +242,7 @@ export default function Search() {
           placeholder="Rechercher des utilisateurs, posts, événements..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 bg-none border-none text-xl py-5"
+          className="p-2 bg-none border-none text-xl py-5 truncate"
         />
       </div>
       <h1 className="text-3xl font-bold mb-8 text-slate-200">Resultats</h1>
@@ -251,7 +251,7 @@ export default function Search() {
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as SearchCategory | "all")}
       >
-        <TabsList className="bg-slate-800 border-slate-700">
+        <TabsList className="mb-4 h-full bg-slate-800 border-slate-700 grid grid-cols-2 gap-2 md:flex md:space-x-4 rounded-lg w-full">
           <TabsTrigger value="all">Tout</TabsTrigger>
           <TabsTrigger value="users">Utilisateurs</TabsTrigger>
           <TabsTrigger value="posts">Posts</TabsTrigger>

@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { PostPropsType } from "@/utils/Type";
 import { MessageCircle, Star } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Layout from "../../layouts/Layout";
 
 const data: PostPropsType[] = [
@@ -164,12 +163,12 @@ export default function Feed() {
 
   return (
     <Layout>
-      <div className="container mx-auto">
+      <div className="md:container md:mx-auto p-3">
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-4 text-foreground">
             Fil d&apos;actualité
           </h1>
-          <div className="flex gap-2">
+          <div className="grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {["Anxiety", "Depression", "Self-Care", "Motivation"].map(
               (theme) => (
                 <Button
@@ -187,36 +186,6 @@ export default function Feed() {
               )
             )}
           </div>
-        </div>
-        <Separator />
-
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-4 py-4 w-full">
-          <Link to="/quiz">
-            <Button
-              className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary w-full"
-              variant="secondary"
-            >
-              <img
-                src="/placeholder.svg?height=40&width=40"
-                alt=""
-                className="w-10 h-10 mr-2"
-              />
-              Take Quiz
-            </Button>
-          </Link>
-          <Link to="/createPost">
-            <Button
-              className="h-24 text-xl bg-primary hover:bg-border hover:text-foreground text-slate-200 shadow-sm shadow-secondary w-full"
-              variant="secondary"
-            >
-              <img
-                src="/placeholder.svg?height=40&width=40"
-                alt=""
-                className="w-10 h-10 mr-2"
-              />
-              Create Post
-            </Button>
-          </Link>
         </div>
         <Separator className="mb-4" />
 

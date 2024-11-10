@@ -82,7 +82,7 @@ export default function IndividualPost() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-24 space-y-5">
+    <div className="container mx-auto px-4 md:py-24 pt-12 pb-4 space-y-5">
       <AsHeader />
       <Post
         post={post}

@@ -27,7 +27,7 @@ export default function PersonalSpace() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-24">
+    <div className="container mx-auto px-4 md:py-24 py-14">
       <AsHeader />
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
@@ -39,7 +39,7 @@ export default function PersonalSpace() {
             <AvatarFallback>AS</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold text-slate-200">
+            <h1 className="md:text-3xl text-xl font-bold text-slate-200">
               Espace Personnel d&apos;Astronaute
             </h1>
             <p className="text-slate-400">Explorateur Niveau 11 • 450 XP</p>
@@ -47,15 +47,19 @@ export default function PersonalSpace() {
         </div>
 
         <Tabs defaultValue="tableau-de-bord">
-          <TabsList className="mb-4">
-            <TabsTrigger value="tableau-de-bord">Tableau de Bord</TabsTrigger>
+          <TabsList className="mb-8 h-full grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-lg w-full">
+            <TabsTrigger value="tableau-de-bord">
+              <Star className="w-4 h-4 md:hidden" /> Tableau de Bord
+            </TabsTrigger>
             <TabsTrigger value="journal-humeur">
-              Journal d&apos;Humeur
+              <Heart className="w-4 h-4 md:hidden" /> Journal d'Humeur
             </TabsTrigger>
             <TabsTrigger value="journal-gratitude">
-              Journal de Gratitude
+              <BookOpen className="w-4 h-4 md:hidden" /> Journal de Gratitude
             </TabsTrigger>
-            <TabsTrigger value="realisations">Réalisations</TabsTrigger>
+            <TabsTrigger value="realisations">
+              <Rocket className="w-4 h-4 md:hidden" /> Réalisations
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="tableau-de-bord">
