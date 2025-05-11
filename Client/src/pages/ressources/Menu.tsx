@@ -150,14 +150,14 @@ export default function Menu() {
           <Link to="/quiz">
             <div className="flex gap-4 w-fit text-xl items-center">
               <Brain className="h-12 w-12" />
-              Take Quiz
+              Prendre un Quizz
             </div>
           </Link>
           <Separator className="my-5" />
           <Link to="/createPost">
             <div className="flex gap-4 w-fit text-xl items-center">
               <FileText className="h-12 w-12" />
-              Create Post
+              Créer une Publication
             </div>
           </Link>
           <Separator className="my-5" />
